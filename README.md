@@ -53,6 +53,8 @@ Run `node src/generatePlan.js --help` for the full option list.
 | `--duration` | no | Duration in months (default `3`) |
 | `--evaluation` | no | Evaluation frequency (default `"Weekly check-ins + Project assessment"`) |
 | `--start-date` | no | Onboarding start date |
+| `--prd-template-name` | no | Name of the team's PRD template (default `"Product Requirement Document_template"`) |
+| `--prd-template-link` | no | Link to the PRD template, if you have one (renders as a hyperlink instead of plain text) |
 | `--out` | no | Output path (default `./output/<Name>_Onboarding_Plan.docx`) |
 | `--config` | no | JSON file with any of the above (plus `sqlResources`, `sqlTasks`, `sqlAccessNote`, `sqlAccessSource` to override the SQL module's defaults) |
 

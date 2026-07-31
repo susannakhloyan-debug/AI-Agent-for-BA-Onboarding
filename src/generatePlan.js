@@ -42,6 +42,8 @@ Optional:
   --duration <number>        Duration in months (default: 3)
   --evaluation <string>      Evaluation frequency (default: "Weekly check-ins + Project assessment")
   --start-date <string>      Onboarding start date
+  --prd-template-name <str>  Name of the team's PRD template (default: "Product Requirement Document_template")
+  --prd-template-link <url>  Link to the PRD template, if you have one (renders as a hyperlink)
   --out <path>               Output .docx path (default: ./output/<Name>_Onboarding_Plan.docx)
   --config <path>            Load a JSON file of the above options (CLI flags override it)
 `;
@@ -71,6 +73,8 @@ async function main() {
     durationMonths: Number(args.duration || fromConfig.durationMonths || 3),
     evaluationFrequency: args.evaluation || fromConfig.evaluationFrequency,
     startDate: args['start-date'] || fromConfig.startDate,
+    prdTemplateName: args['prd-template-name'] || fromConfig.prdTemplateName,
+    prdTemplateLink: args['prd-template-link'] || fromConfig.prdTemplateLink,
     sqlResources: fromConfig.sqlResources,
     sqlTasks: fromConfig.sqlTasks,
     sqlAccessNote: fromConfig.sqlAccessNote,
