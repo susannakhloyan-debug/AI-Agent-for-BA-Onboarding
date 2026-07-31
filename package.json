@@ -1,0 +1,19 @@
+{
+  "name": "ai-agent-for-ba-onboarding",
+  "version": "1.0.0",
+  "description": "Generates BA Onboarding Plans (.docx) for new Business Analysts and interns, tailored to whatever product/topic each one is assigned.",
+  "main": "src/generatePlan.js",
+  "scripts": {
+    "generate": "node src/generatePlan.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:41729/git/susannakhloyan-debug/AI-Agent-for-BA-Onboarding"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "docx": "^9.7.1"
+  }
+}
