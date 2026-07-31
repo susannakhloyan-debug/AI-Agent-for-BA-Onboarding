@@ -5,7 +5,8 @@
   "main": "src/generatePlan.js",
   "scripts": {
     "generate": "node src/generatePlan.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node test/smoke.test.js"
   },
   "repository": {
     "type": "git",
