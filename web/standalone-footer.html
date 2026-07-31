@@ -1,0 +1,225 @@
+</script>
+
+<div class="page">
+  <header class="masthead">
+    <div class="brand">
+      <span class="mark">BA · TEAM</span>
+      <div>
+        <h1 class="font-display">Onboarding Case File</h1>
+        <p>Fill in one analyst's details to prepare their onboarding plan — the curriculum stays fixed, only their assignment changes.</p>
+      </div>
+    </div>
+    <div class="ref">GENERATED CLIENT-SIDE<br>NO DATA LEAVES THIS PAGE</div>
+  </header>
+
+  <div class="layout">
+    <aside class="rail">
+      <h2>Contents</h2>
+      <ol>
+        <li data-n="1">Requirement Gathering &amp; Negotiation (Imitation)</li>
+        <li data-n="2">Requirements Analysis &amp; Documentation</li>
+        <li data-n="3">Scope Splitting — MVP &amp; Priorities</li>
+        <li data-n="4">Process Modeling</li>
+        <li data-n="5">Wireframing</li>
+        <li data-n="6">Mentor Presentation (Grooming)</li>
+        <li data-n="7">SQL</li>
+        <li data-n="8">Feature Ideation</li>
+        <li data-n="9">Alternative Solution</li>
+      </ol>
+      <p class="note"><strong>Fixed curriculum.</strong> Every plan runs this same nine-part sequence — the theme below is what changes from analyst to analyst.</p>
+    </aside>
+
+    <main>
+      <form id="plan-form" novalidate>
+        <fieldset>
+          <legend>Analyst</legend>
+          <div class="grid2">
+            <div class="field span2">
+              <label for="baName">Full name <span class="req">*</span></label>
+              <input type="text" id="baName" name="baName" placeholder="e.g. Nane Galstyan" required />
+            </div>
+            <div class="field">
+              <label>Role</label>
+              <div class="segmented" role="group" aria-label="Role">
+                <button type="button" data-role="new_ba" aria-pressed="true">New BA</button>
+                <button type="button" data-role="intern" aria-pressed="false">Intern</button>
+              </div>
+              <input type="hidden" id="role" name="role" value="new_ba" />
+            </div>
+            <div class="field">
+              <label for="startDate">Start date <span class="opt">(optional)</span></label>
+              <input type="text" id="startDate" name="startDate" placeholder="e.g. 2026-08-04" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Assignment</legend>
+          <div class="grid2">
+            <div class="field span2">
+              <label for="topic">Theme they'll work on <span class="req">*</span></label>
+              <input type="text" id="topic" name="topic" placeholder="e.g. Loyalty Points Program Enhancements" required />
+            </div>
+            <div class="field">
+              <label for="productName">Product / system <span class="opt">(optional)</span></label>
+              <input type="text" id="productName" name="productName" placeholder="e.g. MyBusiness" />
+            </div>
+            <div class="field">
+              <label for="subProcessTopic">Process-modeling topic <span class="opt">(optional)</span></label>
+              <input type="text" id="subProcessTopic" name="subProcessTopic" placeholder="defaults to the theme above" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Program</legend>
+          <div class="grid2">
+            <div class="field span2">
+              <label for="mentor">Mentor's full name <span class="req">*</span></label>
+              <input type="text" id="mentor" name="mentor" placeholder="e.g. Susanna Khloyan" required />
+            </div>
+            <div class="field">
+              <label for="durationMonths">Duration, months</label>
+              <input type="number" id="durationMonths" name="durationMonths" class="font-mono" value="3" min="1" max="24" />
+            </div>
+            <div class="field">
+              <label for="evaluationFrequency">Evaluation frequency <span class="opt">(optional)</span></label>
+              <input type="text" id="evaluationFrequency" name="evaluationFrequency" placeholder="Weekly check-ins + Project assessment" />
+            </div>
+          </div>
+        </fieldset>
+
+        <details class="more">
+          <summary>Documentation references</summary>
+          <div class="grid2">
+            <div class="field">
+              <label for="prdTemplateName">PRD template name <span class="opt">(optional)</span></label>
+              <input type="text" id="prdTemplateName" name="prdTemplateName" placeholder="Product Requirement Document_template" />
+            </div>
+            <div class="field">
+              <label for="prdTemplateLink">PRD template link <span class="opt">(optional)</span></label>
+              <input type="url" id="prdTemplateLink" name="prdTemplateLink" placeholder="https://…" />
+            </div>
+          </div>
+        </details>
+
+        <div class="actions">
+          <button type="submit" class="generate" id="submit-btn">Generate Onboarding Plan</button>
+          <span id="status" role="status"></span>
+        </div>
+      </form>
+
+      <div class="result" id="result">
+        <div class="stamp">Plan<br>Prepared</div>
+        <div class="result-body">
+          <h3 id="result-name" class="font-display"></h3>
+          <p id="result-summary"></p>
+          <dl>
+            <dt>Duration</dt><dd id="result-duration"></dd>
+            <dt>Mentor</dt><dd id="result-mentor"></dd>
+          </dl>
+        </div>
+        <a href="#" id="download-link" class="dl-link" download>Download again</a>
+      </div>
+    </main>
+  </div>
+
+  <footer class="foot">
+    <span>BA Onboarding Plan Generator — runs entirely in your browser, nothing is uploaded.</span>
+    <span class="font-mono">v1</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  const { buildPlan, buildDocument, Packer } = window.BAOnboarding;
+
+  const form = document.getElementById('plan-form');
+  const statusEl = document.getElementById('status');
+  const btn = document.getElementById('submit-btn');
+  const result = document.getElementById('result');
+  const roleInput = document.getElementById('role');
+  const segButtons = document.querySelectorAll('.segmented button');
+  const downloadLink = document.getElementById('download-link');
+  let lastUrl = null;
+
+  segButtons.forEach((b) => {
+    b.addEventListener('click', () => {
+      segButtons.forEach((o) => o.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      roleInput.value = b.getAttribute('data-role');
+    });
+  });
+
+  function fieldValue(id) {
+    const el = document.getElementById(id);
+    return el && el.value ? el.value.trim() : undefined;
+  }
+
+  async function generate() {
+    statusEl.textContent = '';
+    result.classList.remove('visible');
+
+    const options = {
+      baName: fieldValue('baName'),
+      role: fieldValue('role') || 'new_ba',
+      topic: fieldValue('topic'),
+      mentor: fieldValue('mentor'),
+      productName: fieldValue('productName'),
+      subProcessTopic: fieldValue('subProcessTopic'),
+      durationMonths: Number(fieldValue('durationMonths')) || 3,
+      evaluationFrequency: fieldValue('evaluationFrequency'),
+      startDate: fieldValue('startDate'),
+      prdTemplateName: fieldValue('prdTemplateName'),
+      prdTemplateLink: fieldValue('prdTemplateLink'),
+    };
+    Object.keys(options).forEach((k) => options[k] === undefined && delete options[k]);
+
+    if (!options.baName || !options.topic || !options.mentor) {
+      statusEl.textContent = 'Name, theme, and mentor are required.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Preparing…';
+
+    try {
+      const plan = buildPlan(options);
+      const doc = buildDocument(plan);
+      const blob = await Packer.toBlob(doc);
+
+      const safeName = options.baName.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
+      const filename = (safeName || 'BA') + '_Onboarding_Plan.docx';
+
+      if (lastUrl) URL.revokeObjectURL(lastUrl);
+      lastUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = lastUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      downloadLink.href = lastUrl;
+      downloadLink.download = filename;
+      document.getElementById('result-name').textContent = options.baName;
+      document.getElementById('result-summary').textContent = plan.meta.topic;
+      document.getElementById('result-duration').textContent = plan.meta.durationMonths + ' month' + (plan.meta.durationMonths > 1 ? 's' : '');
+      document.getElementById('result-mentor').textContent = plan.meta.mentor;
+      result.classList.add('visible');
+      statusEl.textContent = '';
+    } catch (err) {
+      statusEl.textContent = err.message || 'Something went wrong generating the plan.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate Onboarding Plan';
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    generate();
+  });
+})();
+</script>

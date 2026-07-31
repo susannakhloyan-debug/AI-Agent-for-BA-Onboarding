@@ -17,9 +17,28 @@ exercise flow) stays consistent.
 npm install
 ```
 
-## Generate a plan (web form)
+## Generate a plan (standalone page, no server)
 
-The easiest way — no command-line flags needed:
+Open `public/standalone.html` directly in your browser (double-click it, or
+drag it into a browser tab) — no `npm start`, no server, nothing installed
+required once the file exists. It runs entirely client-side: fill in the
+form, click **Generate Onboarding Plan**, and the `.docx` downloads. You can
+also host this single file anywhere static (e.g. GitHub Pages).
+
+If you change `src/planContent.js` or `src/buildDocx.js`, rebuild it with:
+
+```bash
+npm install
+npm run build:standalone
+```
+
+This regenerates `public/standalone.html` by bundling those modules (via
+esbuild) together with the page in `web/standalone-header.html` /
+`web/standalone-footer.html`.
+
+## Generate a plan (web form with a server)
+
+Needs `npm start` running, but is otherwise the same experience:
 
 ```bash
 npm start
@@ -92,7 +111,13 @@ src/
   generatePlan.js   # CLI entry point
   server.js          # web form entry point (npm start)
 public/
-  index.html         # the web form
+  index.html         # the server-backed web form
+  standalone.html     # generated: the no-server, client-side page
+web/
+  standalone-header.html  # standalone.html's <head>/styles
+  standalone-footer.html  # standalone.html's markup + page script
+scripts/
+  build-standalone.js     # bundles src/*.js + web/*.html -> public/standalone.html
 examples/
   loyalty-points-example.json
 ```

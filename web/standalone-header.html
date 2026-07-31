@@ -1,0 +1,412 @@
+<title>BA Onboarding — Case File</title>
+<style>
+  :root {
+    --paper: #f3f0e8;
+    --paper-raised: #fbf9f4;
+    --ink: #26241e;
+    --ink-soft: #4a463c;
+    --muted: #7a7364;
+    --navy: #1f3a5f;
+    --navy-deep: #14283f;
+    --navy-tint: #e7edf4;
+    --gold: #a9740f;
+    --gold-soft: #f3e6c9;
+    --line: #ddd5c0;
+    --danger: #a3402f;
+    --shadow: 0 1px 2px rgba(38, 36, 30, 0.06), 0 8px 24px -12px rgba(38, 36, 30, 0.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #1c1a15;
+      --paper-raised: #262319;
+      --ink: #ece7d9;
+      --ink-soft: #cec7b3;
+      --muted: #948c76;
+      --navy: #8fb0d9;
+      --navy-deep: #bcd2ee;
+      --navy-tint: #26344a;
+      --gold: #d9a441;
+      --gold-soft: #3a2f18;
+      --line: #3c372a;
+      --danger: #e08469;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1c1a15;
+    --paper-raised: #262319;
+    --ink: #ece7d9;
+    --ink-soft: #cec7b3;
+    --muted: #948c76;
+    --navy: #8fb0d9;
+    --navy-deep: #bcd2ee;
+    --navy-tint: #26344a;
+    --gold: #d9a441;
+    --gold-soft: #3a2f18;
+    --line: #3c372a;
+    --danger: #e08469;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --paper: #f3f0e8;
+    --paper-raised: #fbf9f4;
+    --ink: #26241e;
+    --ink-soft: #4a463c;
+    --muted: #7a7364;
+    --navy: #1f3a5f;
+    --navy-deep: #14283f;
+    --navy-tint: #e7edf4;
+    --gold: #a9740f;
+    --gold-soft: #f3e6c9;
+    --line: #ddd5c0;
+    --danger: #a3402f;
+    --shadow: 0 1px 2px rgba(38, 36, 30, 0.06), 0 8px 24px -12px rgba(38, 36, 30, 0.18);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-display {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  }
+  .font-mono {
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 56px) clamp(16px, 4vw, 32px) 80px;
+  }
+
+  header.masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  header.masthead .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  header.masthead .mark {
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    padding: 3px 7px;
+  }
+  header.masthead h1 {
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    margin: 0;
+    font-weight: 600;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  header.masthead p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 46ch;
+  }
+  header.masthead .ref {
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 44px;
+    align-items: start;
+  }
+  @media (max-width: 780px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .rail {
+    position: sticky;
+    top: 24px;
+  }
+  .rail h2 {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .rail ol {
+    list-style: none;
+    margin: 0 0 22px;
+    padding: 0;
+    border-left: 1px solid var(--line);
+  }
+  .rail li {
+    position: relative;
+    padding: 7px 0 7px 18px;
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    line-height: 1.35;
+  }
+  .rail li::before {
+    content: attr(data-n);
+    position: absolute;
+    left: -1px;
+    top: 8px;
+    width: 15px;
+    height: 15px;
+    transform: translateX(-50%);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rail .note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+    padding: 14px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .rail .note strong { color: var(--ink-soft); }
+  @media (max-width: 780px) {
+    .rail { position: static; }
+    .rail ol { display: none; }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  fieldset legend {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    font-weight: 700;
+    padding: 0 0 12px;
+    width: 100%;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 16px;
+  }
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 18px;
+  }
+  @media (max-width: 560px) {
+    .grid2 { grid-template-columns: 1fr; }
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.span2 { grid-column: 1 / -1; }
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  label .req { color: var(--danger); margin-left: 2px; }
+  label .opt { color: var(--muted); font-weight: 400; }
+  input[type="text"], input[type="url"], input[type="number"] {
+    font: inherit;
+    font-size: 0.95rem;
+    padding: 10px 12px;
+    border-radius: 7px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink);
+  }
+  input::placeholder { color: var(--muted); opacity: 0.8; }
+  input:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 1px;
+    border-color: var(--navy);
+  }
+
+  .segmented {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content;
+  }
+  .segmented button {
+    font: inherit;
+    font-size: 0.86rem;
+    padding: 9px 16px;
+    background: var(--paper-raised);
+    color: var(--ink-soft);
+    border: none;
+    cursor: pointer;
+    border-right: 1px solid var(--line);
+  }
+  .segmented button:last-child { border-right: none; }
+  .segmented button[aria-pressed="true"] {
+    background: var(--navy);
+    color: var(--paper-raised);
+    font-weight: 600;
+  }
+
+  details.more {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  details.more > summary {
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--navy);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  details.more > summary::-webkit-details-marker { display: none; }
+  details.more > summary::before {
+    content: "+";
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    border: 1px solid var(--navy);
+    border-radius: 50%;
+    font-size: 0.7rem;
+  }
+  details.more[open] > summary::before { content: "−"; }
+  details.more .grid2 { margin-top: 16px; }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 6px;
+  }
+  button.generate {
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    color: var(--paper-raised);
+    background: var(--navy);
+    border: 1px solid var(--navy);
+    padding: 13px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: background 120ms ease, transform 120ms ease;
+  }
+  button.generate:hover { background: var(--navy-deep); border-color: var(--navy-deep); }
+  button.generate:active { transform: translateY(1px); }
+  button.generate:disabled { opacity: 0.6; cursor: wait; }
+  button.generate:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  #status {
+    font-size: 0.86rem;
+    color: var(--danger);
+    max-width: 42ch;
+  }
+
+  .result {
+    display: none;
+    margin-top: 6px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    gap: 16px;
+    align-items: center;
+  }
+  .result.visible { display: flex; }
+  .stamp {
+    flex: none;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-8deg);
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+  .result-body { flex: 1; min-width: 0; }
+  .result-body h3 {
+    margin: 0 0 4px;
+    font-size: 1.02rem;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  .result-body p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .result-body dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3px 10px;
+    margin: 10px 0 0;
+    font-size: 0.82rem;
+  }
+  .result-body dt { color: var(--muted); }
+  .result-body dd { margin: 0; color: var(--ink-soft); font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace; }
+  .result a.dl-link {
+    color: var(--navy);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--navy);
+  }
+
+  footer.foot {
+    margin-top: 60px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.78rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>
