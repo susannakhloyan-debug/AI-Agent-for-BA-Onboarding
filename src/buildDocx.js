@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs');
 const {
   Document,
   Packer,
@@ -243,6 +242,7 @@ function buildDocument(plan) {
 }
 
 async function writePlanDocx(plan, outputPath) {
+  const fs = require('fs');
   const doc = buildDocument(plan);
   const buffer = await Packer.toBuffer(doc);
   fs.writeFileSync(outputPath, buffer);
