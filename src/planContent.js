@@ -50,6 +50,8 @@ function buildPlan({
   sqlTasks = DEFAULT_SQL_TASKS,
   sqlAccessNote = 'Practice environment / dataset access to be provided by the mentor.',
   sqlAccessSource = { text: 'https://www.sql-practice.online/scenario/select-statements', url: 'https://www.sql-practice.online/scenario/select-statements' },
+  prdTemplateName = 'Product Requirement Document_template',
+  prdTemplateLink,
 }) {
   if (!baName) throw new Error('baName is required');
   if (!topic) throw new Error('topic is required');
@@ -111,8 +113,12 @@ function buildPlan({
       parts: [
         {
           paragraphs: [
-            `Analyze the gathered requirements and document them as an Epic -> User Story decomposition, and document a PRD covering the Epic scope for "${topic}" (using the team's PRD template).`,
+            `Analyze the gathered requirements and document them as an Epic -> User Story decomposition, and document a PRD covering the Epic scope for "${topic}".`,
+            '(Using predefined template)',
           ],
+          linkLine: prdTemplateLink
+            ? { text: prdTemplateName, url: prdTemplateLink }
+            : { text: prdTemplateName },
         },
       ],
     },

@@ -95,6 +95,21 @@ function bodyText(text) {
   return new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text })] });
 }
 
+function linkLineParagraph({ text, url }) {
+  if (url) {
+    return new Paragraph({
+      spacing: { after: 120 },
+      children: [
+        new ExternalHyperlink({
+          link: url,
+          children: [new TextRun({ text, color: COLORS.link, underline: {} })],
+        }),
+      ],
+    });
+  }
+  return new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text, italics: true })] });
+}
+
 function cell(text, opts = {}) {
   const { header = false, width } = opts;
   return new TableCell({
@@ -169,6 +184,7 @@ function renderPart(part) {
   const out = [];
   if (part.heading) out.push(heading2(part.heading));
   if (part.paragraphs) part.paragraphs.forEach((p) => out.push(bodyText(p)));
+  if (part.linkLine) out.push(linkLineParagraph(part.linkLine));
   if (part.bullets) out.push(...bulletList(part.bullets));
   if (part.links) out.push(...linkList(part.links));
   if (part.sqlTable) {
