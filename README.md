@@ -17,7 +17,18 @@ exercise flow) stays consistent.
 npm install
 ```
 
-## Generate a plan
+## Generate a plan (web form)
+
+The easiest way — no command-line flags needed:
+
+```bash
+npm start
+```
+
+Then open **http://localhost:3000** in your browser, fill in the form, and
+click **Generate Onboarding Plan** — the `.docx` downloads automatically.
+
+## Generate a plan (command line)
 
 Via CLI flags:
 
@@ -79,6 +90,9 @@ src/
   planContent.js   # builds the structured plan data from inputs
   buildDocx.js      # renders that data into a .docx (docx-js)
   generatePlan.js   # CLI entry point
+  server.js          # web form entry point (npm start)
+public/
+  index.html         # the web form
 examples/
   loyalty-points-example.json
 ```

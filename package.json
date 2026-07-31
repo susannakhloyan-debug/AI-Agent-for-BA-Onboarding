@@ -4,7 +4,8 @@
   "description": "Generates BA Onboarding Plans (.docx) for new Business Analysts and interns, tailored to whatever product/topic each one is assigned.",
   "main": "src/generatePlan.js",
   "scripts": {
-    "generate": "node src/generatePlan.js"
+    "generate": "node src/generatePlan.js",
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "docx": "^9.7.1"
+    "docx": "^9.7.1",
+    "express": "^5.2.1"
   }
 }
