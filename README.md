@@ -68,6 +68,15 @@ Or via a JSON config (CLI flags override config values):
 node src/generatePlan.js --config examples/loyalty-points-example.json
 ```
 
+Another ready-made topic — a returns/refunds workflow, which is a common
+first assignment because it touches multiple user types (customer, support
+agent, finance) and has clear approval branching for the process-modeling
+exercise:
+
+```bash
+node src/generatePlan.js --config examples/order-return-refund-example.json
+```
+
 Run `node src/generatePlan.js --help` for the full option list.
 
 ### Options
