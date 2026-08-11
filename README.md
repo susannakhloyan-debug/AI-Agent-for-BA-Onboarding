@@ -25,16 +25,45 @@ required once the file exists. It runs entirely client-side: fill in the
 form, click **Generate Onboarding Plan**, and the `.docx` downloads. You can
 also host this single file anywhere static (e.g. GitHub Pages).
 
-If you change `src/planContent.js` or `src/buildDocx.js`, rebuild it with:
+There's a matching standalone page for the
+[Banking User Story Generator](#banking-user-story-generator) at
+`public/user-story-standalone.html` — same idea, but downloads a `.md` file.
+The two pages link to each other in their nav.
+
+If you change `src/planContent.js`, `src/buildDocx.js`,
+`src/userStoryContent.js`, or `src/buildUserStoryMarkdown.js`, rebuild both
+standalone pages with:
 
 ```bash
 npm install
 npm run build:standalone
 ```
 
-This regenerates `public/standalone.html` by bundling those modules (via
-esbuild) together with the page in `web/standalone-header.html` /
-`web/standalone-footer.html`.
+This regenerates `public/standalone.html` and
+`public/user-story-standalone.html` by bundling those modules (via esbuild)
+together with the page markup in `web/standalone-header.html` /
+`web/standalone-footer.html` and
+`web/user-story-standalone-header.html` /
+`web/user-story-standalone-footer.html`.
+
+### Sharing a link (GitHub Pages)
+
+`docs/index.html` and `docs/user-story-standalone.html` are copies of the
+two standalone pages above, kept in the `docs/` folder so GitHub Pages can
+serve them as shareable links once this repo has Pages enabled (Settings →
+Pages → Deploy from a branch → `main` / `docs`). After rebuilding the
+standalone pages, refresh the `docs/` copies with:
+
+```bash
+cp public/standalone.html docs/index.html
+cp public/user-story-standalone.html docs/user-story-standalone.html
+sed -i 's|href="./standalone.html"|href="./index.html"|' docs/user-story-standalone.html
+```
+
+(The `sed` step exists because `docs/index.html` — unlike
+`public/standalone.html` — is the folder's root page, so the "back to
+onboarding plan" link needs to point at `./index.html` instead of
+`./standalone.html`.)
 
 ## Generate a plan (web form with a server)
 
@@ -46,6 +75,12 @@ npm start
 
 Then open **http://localhost:3000** in your browser, fill in the form, and
 click **Generate Onboarding Plan** — the `.docx` downloads automatically.
+
+The same server also hosts a web form for the
+[Banking User Story Generator](#banking-user-story-generator) at
+**http://localhost:3000/user-story.html** — fill in the fields and click
+**Generate User Story** to download a `.md` file (there's a link between
+the two forms in the page nav).
 
 ## Generate a plan (command line)
 
@@ -106,21 +141,67 @@ Run `node src/generatePlan.js --help` for the full option list.
 
 ```
 src/
-  planContent.js   # builds the structured plan data from inputs
-  buildDocx.js      # renders that data into a .docx (docx-js)
-  generatePlan.js   # CLI entry point
-  server.js          # web form entry point (npm start)
+  planContent.js         # builds the structured plan data from inputs
+  buildDocx.js             # renders that data into a .docx (docx-js)
+  generatePlan.js          # CLI entry point (onboarding plan)
+  userStoryContent.js      # builds the structured banking user story data from inputs
+  buildUserStoryMarkdown.js # renders/appends that data to UserStory.md
+  generateUserStory.js     # CLI entry point (banking user story)
+  server.js                 # web form entry point (npm start)
 public/
-  index.html         # the server-backed web form
-  standalone.html     # generated: the no-server, client-side page
+  index.html                     # the server-backed web form (onboarding plan)
+  user-story.html                 # the server-backed web form (banking user story)
+  standalone.html                  # generated: no-server, client-side page (onboarding plan)
+  user-story-standalone.html        # generated: no-server, client-side page (banking user story)
 web/
-  standalone-header.html  # standalone.html's <head>/styles
-  standalone-footer.html  # standalone.html's markup + page script
+  standalone-header.html             # standalone.html's <head>/styles
+  standalone-footer.html             # standalone.html's markup + page script
+  user-story-standalone-header.html   # user-story-standalone.html's <head>/styles
+  user-story-standalone-footer.html   # user-story-standalone.html's markup + page script
 scripts/
-  build-standalone.js     # bundles src/*.js + web/*.html -> public/standalone.html
+  build-standalone.js     # bundles src/*.js + web/*.html -> public/*-standalone.html
 examples/
   loyalty-points-example.json
+  card-block-story-example.json
+docs/
+  index.html                  # GitHub Pages copy of public/standalone.html
+  user-story-standalone.html   # GitHub Pages copy of public/user-story-standalone.html
 ```
+
+## Banking User Story Generator
+
+Generates a complete banking user story (Title, User Story, Context,
+Preconditions, Main Flow, Gherkin Acceptance Criteria, NFRs, Out of Scope,
+Open Questions) as Markdown, and appends it to `UserStory.md`.
+
+```bash
+node src/generateUserStory.js \
+  --feature "block a lost or stolen debit card" \
+  --role "cardholder with an active debit card" \
+  --goal "unauthorized transactions are stopped immediately" \
+  --trigger "the Cards section of the mobile app" \
+  --design-status "confirmed Figma" \
+  --apis "POST /cards/{cardId}/block" \
+  --constraints "PSD2 strong customer authentication applies to sensitive card actions"
+```
+
+Or via a JSON config:
+
+```bash
+node src/generateUserStory.js --config examples/card-block-story-example.json
+```
+
+Run `node src/generateUserStory.js --help` for the full option list. Each
+run appends a new `## <Story Title>` section to `UserStory.md` (created on
+first run), separated by `---`, so the file becomes a running backlog.
+Business rules (limits, fees, thresholds) are never invented — anything not
+supplied via flags is marked `[TBD]` or listed under Open Questions.
+
+There's also a web form for this (`npm start`, then open
+`/user-story.html`) — see [Generate a plan (web form with a server)](#generate-a-plan-web-form-with-a-server)
+above. The web form downloads one story per submission (as `.md`) rather
+than appending server-side, since the server may serve multiple users at
+once.
 
 ## Extending
 

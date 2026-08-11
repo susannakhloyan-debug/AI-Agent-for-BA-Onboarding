@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Banking User Story Generator</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --border: #d9dfe7;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --accent: #2e5395;
+    --accent-dark: #1f3864;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14181f;
+      --card: #1c222c;
+      --border: #333c4a;
+      --text: #e5e9f0;
+      --muted: #9aa4b2;
+      --accent: #6f9ceb;
+      --accent-dark: #a9c6f7;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px 16px 64px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  .nav { margin-bottom: 12px; font-size: 0.85rem; }
+  .nav a { color: var(--accent); text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; color: var(--accent-dark); }
+  p.subtitle { color: var(--muted); margin-top: 0; margin-bottom: 28px; }
+  form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 24px;
+  }
+  legend {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--accent);
+    padding: 0 0 10px;
+  }
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  label .req { color: #d14343; }
+  label .hint { color: var(--muted); font-weight: 400; }
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 52px; }
+  input:focus, textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .row { display: flex; gap: 16px; }
+  .row .field { flex: 1; }
+  .checkboxes { display: flex; flex-wrap: wrap; gap: 16px; }
+  .checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+  }
+  .checkbox-field input { width: auto; }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { background: var(--accent-dark); }
+  button:disabled { opacity: 0.6; cursor: wait; }
+  #status { margin-top: 14px; font-size: 0.9rem; text-align: center; min-height: 1.2em; }
+  #status.error { color: #d14343; }
+  #status.ok { color: #2f9e44; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="/">&larr; BA Onboarding Plan Generator</a></div>
+  <h1>Banking User Story Generator</h1>
+  <p class="subtitle">Fill in the fields below and click Generate — a Markdown user story with Gherkin acceptance criteria will download automatically. Anything left blank that would require inventing a business rule is marked [TBD] or added as an Open Question.</p>
+
+  <form id="story-form">
+    <fieldset>
+      <legend>Required</legend>
+      <div class="field">
+        <label for="feature">Feature / Action <span class="req">*</span></label>
+        <input type="text" id="feature" name="feature" required placeholder="e.g. block a lost or stolen debit card" />
+      </div>
+      <div class="field">
+        <label for="role">User Role <span class="req">*</span> <span class="hint">(be specific)</span></label>
+        <input type="text" id="role" name="role" required placeholder="e.g. cardholder with an active debit card" />
+      </div>
+      <div class="field">
+        <label for="goal">Goal / Value <span class="req">*</span> <span class="hint">("so that ...")</span></label>
+        <input type="text" id="goal" name="goal" required placeholder="e.g. unauthorized transactions are stopped immediately" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional</legend>
+      <div class="field">
+        <label for="title">Story Title <span class="hint">(defaults to the feature text)</span></label>
+        <input type="text" id="title" name="title" placeholder="e.g. Block a lost or stolen card" />
+      </div>
+      <div class="field">
+        <label for="trigger">Trigger / Entry Point</label>
+        <input type="text" id="trigger" name="trigger" placeholder="e.g. the Cards section of the mobile app" />
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="designStatus">Design Status</label>
+          <input type="text" id="designStatus" name="designStatus" placeholder="confirmed Figma / not yet designed / reference only" />
+        </div>
+        <div class="field">
+          <label for="apis">Related APIs <span class="hint">(comma-separated)</span></label>
+          <input type="text" id="apis" name="apis" placeholder="POST /cards/{cardId}/block" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="constraints">Known Constraints <span class="hint">(comma-separated; regulatory/technical)</span></label>
+        <input type="text" id="constraints" name="constraints" placeholder="PSD2 strong customer authentication applies" />
+      </div>
+      <div class="field">
+        <label for="preconditions">Preconditions <span class="hint">(comma-separated; default: generic banking preconditions)</span></label>
+        <textarea id="preconditions" name="preconditions" placeholder="User is authenticated, card is active, ..."></textarea>
+      </div>
+      <div class="field">
+        <label for="mainFlow">Main Flow Steps <span class="hint">(comma-separated, in order; default: generic happy-path steps)</span></label>
+        <textarea id="mainFlow" name="mainFlow" placeholder="User opens Cards, selects the card, taps Block, confirms, ..."></textarea>
+      </div>
+      <div class="field">
+        <label for="outOfScope">Out of Scope <span class="hint">(comma-separated)</span></label>
+        <textarea id="outOfScope" name="outOfScope"></textarea>
+      </div>
+      <div class="field">
+        <label for="openQuestions">Open Questions <span class="hint">(comma-separated)</span></label>
+        <textarea id="openQuestions" name="openQuestions"></textarea>
+      </div>
+      <div class="field">
+        <label>Include Acceptance Criteria For</label>
+        <div class="checkboxes">
+          <div class="checkbox-field">
+            <input type="checkbox" id="security" name="security" checked />
+            <label for="security" style="margin:0;">Security & Compliance</label>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="notifications" name="notifications" checked />
+            <label for="notifications" style="margin:0;">Notifications</label>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="localization" name="localization" checked />
+            <label for="localization" style="margin:0;">Localization</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit" id="submit-btn">Generate User Story</button>
+    <div id="status"></div>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById('story-form');
+const statusEl = document.getElementById('status');
+const btn = document.getElementById('submit-btn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  statusEl.textContent = '';
+  statusEl.className = '';
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+
+  const data = Object.fromEntries(new FormData(form).entries());
+  data.security = form.elements.security.checked;
+  data.notifications = form.elements.notifications.checked;
+  data.localization = form.elements.localization.checked;
+
+  try {
+    const res = await fetch('/generate-story', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Generation failed.' }));
+      throw new Error(err.error || 'Generation failed.');
+    }
+
+    const blob = await res.blob();
+    const disposition = res.headers.get('Content-Disposition') || '';
+    const match = disposition.match(/filename="?([^"]+)"?/);
+    const filename = match ? match[1] : 'User_Story.md';
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    statusEl.textContent = `Downloaded ${filename}`;
+    statusEl.className = 'ok';
+  } catch (err) {
+    statusEl.textContent = err.message;
+    statusEl.className = 'error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate User Story';
+  }
+});
+</script>
+</body>
+</html>

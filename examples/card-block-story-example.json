@@ -1,0 +1,9 @@
+{
+  "feature": "block a lost or stolen debit card",
+  "role": "cardholder with an active debit card",
+  "goal": "unauthorized transactions are stopped immediately",
+  "trigger": "the Cards section of the mobile app",
+  "designStatus": "confirmed Figma",
+  "apis": "POST /cards/{cardId}/block",
+  "constraints": "PSD2 strong customer authentication applies to sensitive card actions"
+}
