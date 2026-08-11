@@ -106,10 +106,13 @@ Run `node src/generatePlan.js --help` for the full option list.
 
 ```
 src/
-  planContent.js   # builds the structured plan data from inputs
-  buildDocx.js      # renders that data into a .docx (docx-js)
-  generatePlan.js   # CLI entry point
-  server.js          # web form entry point (npm start)
+  planContent.js         # builds the structured plan data from inputs
+  buildDocx.js             # renders that data into a .docx (docx-js)
+  generatePlan.js          # CLI entry point (onboarding plan)
+  userStoryContent.js      # builds the structured banking user story data from inputs
+  buildUserStoryMarkdown.js # renders/appends that data to UserStory.md
+  generateUserStory.js     # CLI entry point (banking user story)
+  server.js                 # web form entry point (npm start)
 public/
   index.html         # the server-backed web form
   standalone.html     # generated: the no-server, client-side page
@@ -120,7 +123,37 @@ scripts/
   build-standalone.js     # bundles src/*.js + web/*.html -> public/standalone.html
 examples/
   loyalty-points-example.json
+  card-block-story-example.json
 ```
+
+## Banking User Story Generator
+
+Generates a complete banking user story (Title, User Story, Context,
+Preconditions, Main Flow, Gherkin Acceptance Criteria, NFRs, Out of Scope,
+Open Questions) as Markdown, and appends it to `UserStory.md`.
+
+```bash
+node src/generateUserStory.js \
+  --feature "block a lost or stolen debit card" \
+  --role "cardholder with an active debit card" \
+  --goal "unauthorized transactions are stopped immediately" \
+  --trigger "the Cards section of the mobile app" \
+  --design-status "confirmed Figma" \
+  --apis "POST /cards/{cardId}/block" \
+  --constraints "PSD2 strong customer authentication applies to sensitive card actions"
+```
+
+Or via a JSON config:
+
+```bash
+node src/generateUserStory.js --config examples/card-block-story-example.json
+```
+
+Run `node src/generateUserStory.js --help` for the full option list. Each
+run appends a new `## <Story Title>` section to `UserStory.md` (created on
+first run), separated by `---`, so the file becomes a running backlog.
+Business rules (limits, fees, thresholds) are never invented — anything not
+supplied via flags is marked `[TBD]` or listed under Open Questions.
 
 ## Extending
 
