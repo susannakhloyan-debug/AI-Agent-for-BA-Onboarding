@@ -7,7 +7,7 @@
     "generate": "node src/generatePlan.js",
     "start": "node src/server.js",
     "build:standalone": "node scripts/build-standalone.js",
-    "test": "node test/smoke.test.js"
+    "test": "node test/smoke.test.js && node test/prd-smoke.test.js"
   },
   "repository": {
     "type": "git",

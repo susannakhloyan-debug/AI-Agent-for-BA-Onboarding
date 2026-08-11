@@ -1,0 +1,816 @@
+</script>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="mark mono">BABOK v3</span>
+      <h1 class="serif">Banking PRD Generator</h1>
+    </div>
+    <div class="topbar-status">
+      <span id="status-msg"></span>
+      <span class="req-pill" id="req-pill"><span class="dot"></span><span id="req-pill-text">3 required fields left</span></span>
+    </div>
+    <button type="button" class="btn-generate" id="generate-btn">Generate PRD</button>
+  </div>
+</div>
+
+<div class="page">
+  <nav class="rail" aria-label="Section navigation">
+    <p class="rail-title">Sections</p>
+    <a href="#sec-start"><span class="n mono">—</span>Start here</a>
+    <a href="#sec-1"><span class="n mono">01</span>Business need</a>
+    <a href="#sec-2"><span class="n mono">02</span>Objectives &amp; KPIs</a>
+    <a href="#sec-3"><span class="n mono">03</span>Stakeholders</a>
+    <a href="#sec-4"><span class="n mono">04</span>Elicitation</a>
+    <a href="#sec-5"><span class="n mono">05</span>Scope</a>
+    <a href="#sec-6"><span class="n mono">06</span>As-is / To-be</a>
+    <a href="#sec-7"><span class="n mono">07</span>Assumptions</a>
+    <a href="#sec-8"><span class="n mono">08</span>Regulatory</a>
+    <a href="#sec-9"><span class="n mono">09</span>Business rules</a>
+    <a href="#sec-10"><span class="n mono">10</span>Epics &amp; stories</a>
+    <a href="#sec-11"><span class="n mono">11</span>NFRs</a>
+    <a href="#sec-12"><span class="n mono">12</span>Data</a>
+    <a href="#sec-13"><span class="n mono">13</span>Risks</a>
+    <a href="#sec-15"><span class="n mono">15</span>Sign-off</a>
+    <a href="#sec-16"><span class="n mono">16</span>Glossary</a>
+  </nav>
+
+  <main>
+    <div class="intro" id="sec-start">
+      <h2 class="serif">Fill in your project, generate a BABOK-aligned PRD</h2>
+      <p>Everything runs in your browser — nothing is uploaded anywhere. Only <strong>Product</strong>, <strong>Feature</strong>, and <strong>Author</strong> are required; leave any other section empty and the generator falls back to a sensible banking default for it.</p>
+      <div class="actions-line">
+        <button type="button" class="link-btn" id="load-example-btn">Load an example (Instant Card Freeze &amp; Unfreeze)</button>
+        <button type="button" class="link-btn" id="clear-btn">Clear all fields</button>
+        <a class="link-btn" href="prd-standalone.html">Just need the core fields? Use the quick form</a>
+      </div>
+    </div>
+
+    <div class="result-banner" id="result-banner">
+      <span>✓</span>
+      <span><strong id="result-name"></strong> — generated. <a href="#" id="download-link" download>Download again</a></span>
+    </div>
+
+    <section class="card" id="sec-required">
+      <div class="card-head"><h3 class="serif">Product, feature &amp; author</h3><span class="card-required-tag">Required</span></div>
+      <div class="grid3">
+        <div class="field">
+          <label for="f-productName">Product / system name</label>
+          <input type="text" id="f-productName" placeholder="e.g. Digital Banking Platform" />
+        </div>
+        <div class="field">
+          <label for="f-featureName">Feature / epic</label>
+          <input type="text" id="f-featureName" placeholder="e.g. Instant Card Freeze &amp; Unfreeze" />
+        </div>
+        <div class="field">
+          <label for="f-author">Author (you)</label>
+          <input type="text" id="f-author" placeholder="Your full name" />
+        </div>
+      </div>
+      <details class="optional-hint">
+        <summary>Document details (business unit, version, status, priority…)</summary>
+        <div class="grid3" style="margin-top:12px;">
+          <div class="field"><label for="f-businessUnit">Business unit <span class="opt">optional</span></label><input type="text" id="f-businessUnit" placeholder="Retail Banking" /></div>
+          <div class="field"><label for="f-documentVersion">Version <span class="opt">optional</span></label><input type="text" id="f-documentVersion" placeholder="0.1" /></div>
+          <div class="field"><label for="f-status">Status <span class="opt">optional</span></label><input type="text" id="f-status" placeholder="Draft" /></div>
+          <div class="field"><label for="f-priority">Priority <span class="opt">optional</span></label>
+            <select id="f-priority"><option value="">High (default)</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+          </div>
+          <div class="field"><label for="f-targetRelease">Target release <span class="opt">optional</span></label><input type="text" id="f-targetRelease" placeholder="Q4 2026" /></div>
+          <div class="field"><label for="f-classification">Classification <span class="opt">optional</span></label><input type="text" id="f-classification" placeholder="Internal &amp; Confidential" /></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="card" id="sec-1">
+      <div class="card-head"><span class="num mono">§1</span><h3 class="serif">Purpose &amp; business need</h3></div>
+      <p class="card-babok">BABOK: Strategy Analysis</p>
+      <div class="field">
+        <label for="f-businessNeed">Why does this feature need to exist? <span class="opt">optional</span></label>
+        <textarea id="f-businessNeed" placeholder="What business problem does this solve, and why now?"></textarea>
+      </div>
+    </section>
+
+    <section class="card" id="sec-2">
+      <div class="card-head"><span class="num mono">§2</span><h3 class="serif">Business objectives &amp; success metrics</h3></div>
+      <p class="card-babok">BABOK: Strategy Analysis / Solution Evaluation</p>
+      <div class="field">
+        <label>Business objectives <span class="opt">optional</span></label>
+        <div class="rep" id="rep-businessObjectives"></div>
+      </div>
+      <div class="field">
+        <label>Success metrics (KPIs) <span class="opt">optional</span></label>
+        <div class="rep" id="rep-successMetrics"></div>
+      </div>
+    </section>
+
+    <section class="card" id="sec-3">
+      <div class="card-head"><span class="num mono">§3</span><h3 class="serif">Stakeholder analysis (RACI)</h3></div>
+      <p class="card-babok">BABOK: Business Analysis Planning &amp; Monitoring</p>
+      <div class="field">
+        <label>Stakeholders <span class="opt">optional — defaults to a standard banking RACI list</span></label>
+        <div class="rep" id="rep-stakeholders"></div>
+      </div>
+    </section>
+
+    <section class="card" id="sec-4">
+      <div class="card-head"><span class="num mono">§4</span><h3 class="serif">Elicitation summary</h3></div>
+      <p class="card-babok">BABOK: Elicitation &amp; Collaboration</p>
+      <div class="field">
+        <label>Techniques used <span class="opt">optional</span></label>
+        <div class="rep" id="rep-elicitationTechniques"></div>
+      </div>
+      <div class="field">
+        <label>Sources consulted <span class="opt">optional</span></label>
+        <div class="rep" id="rep-elicitationSources"></div>
+      </div>
+    </section>
+
+    <section class="card" id="sec-5">
+      <div class="card-head"><span class="num mono">§5</span><h3 class="serif">Scope</h3></div>
+      <p class="card-babok">BABOK: Requirements Analysis &amp; Design Definition</p>
+      <div class="field"><label>In scope <span class="opt">optional</span></label><div class="rep" id="rep-inScope"></div></div>
+      <div class="field"><label>Out of scope <span class="opt">optional</span></label><div class="rep" id="rep-outOfScope"></div></div>
+      <div class="field"><label>Channels affected <span class="opt">optional</span></label><div class="rep" id="rep-channelsAffected"></div></div>
+    </section>
+
+    <section class="card" id="sec-6">
+      <div class="card-head"><span class="num mono">§6</span><h3 class="serif">Current state &amp; future state</h3></div>
+      <p class="card-babok">BABOK: Strategy Analysis</p>
+      <div class="grid2">
+        <div class="field"><label for="f-currentState">Current state (as-is) <span class="opt">optional</span></label><textarea id="f-currentState" placeholder="How is this need met today?"></textarea></div>
+        <div class="field"><label for="f-futureState">Future state (to-be) <span class="opt">optional</span></label><textarea id="f-futureState" placeholder="What will it look like once delivered?"></textarea></div>
+      </div>
+    </section>
+
+    <section class="card" id="sec-7">
+      <div class="card-head"><span class="num mono">§7</span><h3 class="serif">Assumptions, constraints &amp; dependencies</h3></div>
+      <p class="card-babok">BABOK: Requirements Life Cycle Management</p>
+      <div class="field"><label>Assumptions <span class="opt">optional</span></label><div class="rep" id="rep-assumptions"></div></div>
+      <div class="field"><label>Constraints <span class="opt">optional</span></label><div class="rep" id="rep-constraints"></div></div>
+      <div class="field"><label>Dependencies <span class="opt">optional</span></label><div class="rep" id="rep-dependencies"></div></div>
+    </section>
+
+    <section class="card" id="sec-8">
+      <div class="card-head"><span class="num mono">§8</span><h3 class="serif">Regulatory &amp; compliance requirements</h3></div>
+      <p class="card-babok">BABOK: Requirements Analysis &amp; Design Definition — banking-specific</p>
+      <div class="field">
+        <label>Frameworks &amp; requirements <span class="opt">optional — defaults to KYC, AML, PCI DSS, PSD2, GDPR, Basel III, SOX</span></label>
+        <div class="rep" id="rep-regulatoryRequirements"></div>
+      </div>
+    </section>
+
+    <section class="card" id="sec-9">
+      <div class="card-head"><span class="num mono">§9</span><h3 class="serif">Business rules</h3></div>
+      <p class="card-babok">BABOK: Requirements Analysis &amp; Design Definition</p>
+      <div class="field"><div class="rep" id="rep-businessRules"></div></div>
+    </section>
+
+    <section class="card" id="sec-10">
+      <div class="card-head"><span class="num mono">§10</span><h3 class="serif">Functional requirements — epics &amp; user stories</h3></div>
+      <p class="card-babok">BABOK: Requirements Analysis &amp; Design Definition</p>
+      <div id="epics-container"></div>
+      <button type="button" class="add-row" id="add-epic-btn">+ Add epic</button>
+    </section>
+
+    <section class="card" id="sec-11">
+      <div class="card-head"><span class="num mono">§11</span><h3 class="serif">Non-functional requirements</h3></div>
+      <p class="card-babok">BABOK: Requirements Analysis &amp; Design Definition</p>
+      <div id="nfr-container"></div>
+      <button type="button" class="add-row" id="add-nfr-btn">+ Add category</button>
+      <p class="field-note" style="margin-top:10px;">Leave empty to use the default categories: Security, Performance, Availability &amp; Reliability, Auditability &amp; Compliance, Usability &amp; Accessibility, Scalability.</p>
+    </section>
+
+    <section class="card" id="sec-12">
+      <div class="card-head"><span class="num mono">§12</span><h3 class="serif">Data requirements</h3></div>
+      <p class="card-babok">BABOK: Requirements Analysis &amp; Design Definition</p>
+      <div class="rep" id="rep-dataRequirements"></div>
+    </section>
+
+    <section class="card" id="sec-13">
+      <div class="card-head"><span class="num mono">§13</span><h3 class="serif">Risk assessment</h3></div>
+      <p class="card-babok">BABOK: Strategy Analysis</p>
+      <div class="rep" id="rep-risks"></div>
+    </section>
+
+    <section class="card" id="sec-15">
+      <div class="card-head"><span class="num mono">§15</span><h3 class="serif">Acceptance &amp; sign-off — approvers</h3></div>
+      <p class="card-babok">BABOK: Solution Evaluation</p>
+      <div class="rep" id="rep-approvers"></div>
+    </section>
+
+    <section class="card" id="sec-16">
+      <div class="card-head"><span class="num mono">§16</span><h3 class="serif">Glossary</h3></div>
+      <p class="card-babok">BABOK: Requirements Life Cycle Management</p>
+      <div class="rep" id="rep-glossary"></div>
+      <p class="field-note" style="margin-top:10px;">Leave empty to use the default banking glossary (KYC, AML, PCI DSS, PSD2, SCA, SLA, RACI, NFR, BABOK).</p>
+    </section>
+
+    <p class="field-note" style="margin: -6px 0 24px;">§14 (Requirements Traceability Matrix) and §17 (BABOK Coverage Checklist) are generated automatically from what you fill in above — there's nothing to enter for them.</p>
+  </main>
+</div>
+
+<footer class="page-foot">
+  <span>Banking PRD Generator — structured per BABOK&reg; v3, runs entirely in your browser</span>
+  <span class="mono">AI-Agent-for-BA-Onboarding</span>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var PRD = window.BankingPRD;
+
+  /* ---------------- generic list (string) repeater ---------------- */
+  function mountListRepeater(id, placeholder) {
+    var root = document.getElementById(id);
+    var rows = document.createElement('div');
+    rows.className = 'rep-rows';
+    root.appendChild(rows);
+
+    function addRow(value) {
+      var row = document.createElement('div');
+      row.className = 'rep-row cols-1';
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = placeholder || '';
+      input.value = value || '';
+      var rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'rm';
+      rm.textContent = '✕';
+      rm.setAttribute('aria-label', 'Remove');
+      rm.addEventListener('click', function () { row.remove(); });
+      row.appendChild(input);
+      row.appendChild(rm);
+      rows.appendChild(row);
+      return row;
+    }
+
+    var addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'add-row';
+    addBtn.textContent = '+ Add';
+    addBtn.addEventListener('click', function () { addRow(''); });
+    root.appendChild(addBtn);
+
+    return {
+      addRow: addRow,
+      clear: function () { rows.innerHTML = ''; },
+      getValues: function () {
+        return Array.prototype.slice.call(rows.querySelectorAll('input'))
+          .map(function (i) { return i.value.trim(); })
+          .filter(Boolean);
+      },
+    };
+  }
+
+  /* ---------------- generic object-row repeater ---------------- */
+  // fields: [{key, label, type:'text'|'select', options:[...], placeholder}]
+  function mountObjectRepeater(id, fields) {
+    var root = document.getElementById(id);
+    var rows = document.createElement('div');
+    rows.className = 'rep-rows';
+    root.appendChild(rows);
+    var colClass = 'cols-' + (fields.length <= 3 ? fields.length : 4);
+
+    function addRow(data) {
+      data = data || {};
+      var row = document.createElement('div');
+      row.className = 'rep-row ' + colClass;
+      var inputs = {};
+      fields.forEach(function (f) {
+        var cell = document.createElement('div');
+        cell.className = 'cell';
+        var lbl = document.createElement('span');
+        lbl.className = 'mini-label';
+        lbl.textContent = f.label;
+        cell.appendChild(lbl);
+        var el;
+        if (f.type === 'select') {
+          el = document.createElement('select');
+          f.options.forEach(function (opt) {
+            var o = document.createElement('option');
+            o.value = opt; o.textContent = opt;
+            el.appendChild(o);
+          });
+        } else {
+          el = document.createElement('input');
+          el.type = 'text';
+          el.placeholder = f.placeholder || '';
+        }
+        el.value = data[f.key] || (f.type === 'select' ? f.options[0] : '');
+        cell.appendChild(el);
+        row.appendChild(cell);
+        inputs[f.key] = el;
+      });
+      var rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'rm';
+      rm.textContent = '✕';
+      rm.setAttribute('aria-label', 'Remove');
+      rm.addEventListener('click', function () { row.remove(); });
+      row.appendChild(rm);
+      rows.appendChild(row);
+      return row;
+    }
+
+    var addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'add-row';
+    addBtn.textContent = '+ Add';
+    addBtn.addEventListener('click', function () { addRow({}); });
+    root.appendChild(addBtn);
+
+    return {
+      addRow: addRow,
+      clear: function () { rows.innerHTML = ''; },
+      getValues: function () {
+        return Array.prototype.slice.call(rows.children).map(function (row) {
+          var obj = {};
+          fields.forEach(function (f, idx) {
+            var el = row.querySelectorAll('input, select')[idx];
+            obj[f.key] = el.value.trim();
+          });
+          return obj;
+        }).filter(function (obj) {
+          return Object.keys(obj).some(function (k) { return obj[k]; });
+        });
+      },
+    };
+  }
+
+  var reps = {
+    businessObjectives: mountListRepeater('rep-businessObjectives', 'e.g. Reduce average handling time by 30%'),
+    successMetrics: mountObjectRepeater('rep-successMetrics', [
+      { key: 'metric', label: 'Metric', placeholder: 'Self-service adoption' },
+      { key: 'target', label: 'Target', placeholder: '≥ 70% within 90 days' },
+      { key: 'measurement', label: 'How measured', placeholder: 'Channel analytics' },
+    ]),
+    stakeholders: mountObjectRepeater('rep-stakeholders', [
+      { key: 'name', label: 'Name', placeholder: 'TBD' },
+      { key: 'role', label: 'Role', placeholder: 'Business Sponsor' },
+      { key: 'raci', label: 'RACI', type: 'select', options: ['R', 'A', 'C', 'I'] },
+    ]),
+    elicitationTechniques: mountListRepeater('rep-elicitationTechniques', 'e.g. Stakeholder interviews with Compliance'),
+    elicitationSources: mountListRepeater('rep-elicitationSources', 'e.g. Business Sponsor, existing policy docs'),
+    inScope: mountListRepeater('rep-inScope', 'What this feature explicitly includes'),
+    outOfScope: mountListRepeater('rep-outOfScope', 'What this feature explicitly excludes'),
+    channelsAffected: mountListRepeater('rep-channelsAffected', 'e.g. Mobile Banking App'),
+    assumptions: mountListRepeater('rep-assumptions', 'Something taken as true for planning'),
+    constraints: mountListRepeater('rep-constraints', 'A hard limit on the solution'),
+    dependencies: mountListRepeater('rep-dependencies', 'A system, team, or decision this depends on'),
+    regulatoryRequirements: mountObjectRepeater('rep-regulatoryRequirements', [
+      { key: 'regulation', label: 'Framework', placeholder: 'KYC / Customer Due Diligence' },
+      { key: 'requirement', label: 'Requirement', placeholder: 'What must this feature do to satisfy it' },
+    ]),
+    businessRules: mountListRepeater('rep-businessRules', 'A rule governing eligibility, limits, or exceptions'),
+    dataRequirements: mountObjectRepeater('rep-dataRequirements', [
+      { key: 'entity', label: 'Data entity', placeholder: 'Customer Profile' },
+      { key: 'description', label: 'Description', placeholder: 'What data, and why' },
+      { key: 'sourceSystem', label: 'Source system', placeholder: 'Core Banking / CIF' },
+      { key: 'sensitivity', label: 'Sensitivity', placeholder: 'PII / PCI / Confidential' },
+    ]),
+    risks: mountObjectRepeater('rep-risks', [
+      { key: 'risk', label: 'Risk', placeholder: 'What could go wrong' },
+      { key: 'impact', label: 'Impact', type: 'select', options: ['High', 'Medium', 'Low'] },
+      { key: 'likelihood', label: 'Likelihood', type: 'select', options: ['High', 'Medium', 'Low'] },
+      { key: 'mitigation', label: 'Mitigation', placeholder: 'How you will reduce or handle it' },
+    ]),
+    approvers: mountObjectRepeater('rep-approvers', [
+      { key: 'name', label: 'Name', placeholder: 'TBD' },
+      { key: 'role', label: 'Role', placeholder: 'Business Sponsor' },
+    ]),
+    glossary: mountObjectRepeater('rep-glossary', [
+      { key: 'term', label: 'Term', placeholder: 'A feature-specific term' },
+      { key: 'definition', label: 'Definition', placeholder: 'What it means' },
+    ]),
+  };
+
+  /* ---------------- NFR categories (category + nested item list) ---------------- */
+  var nfrContainer = document.getElementById('nfr-container');
+  var nfrBlocks = [];
+  function addNfrBlock(category, items) {
+    var block = document.createElement('div');
+    block.className = 'nfr-block';
+    var head = document.createElement('div');
+    head.className = 'nfr-block-head';
+    var catInput = document.createElement('input');
+    catInput.type = 'text';
+    catInput.placeholder = 'Category, e.g. Security';
+    catInput.value = category || '';
+    var rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'rm';
+    rm.textContent = '✕';
+    rm.addEventListener('click', function () {
+      block.remove();
+      nfrBlocks = nfrBlocks.filter(function (b) { return b.block !== block; });
+    });
+    head.appendChild(catInput);
+    head.appendChild(rm);
+    block.appendChild(head);
+
+    var itemsWrap = document.createElement('div');
+    itemsWrap.id = 'nfr-items-' + Math.random().toString(36).slice(2);
+    block.appendChild(itemsWrap);
+    nfrContainer.appendChild(block);
+
+    var itemsRep = mountListRepeater(itemsWrap.id, 'e.g. Sensitive data encrypted in transit and at rest');
+    (items || ['']).forEach(function (it) { itemsRep.addRow(it); });
+
+    nfrBlocks.push({ block: block, catInput: catInput, itemsRep: itemsRep });
+  }
+  document.getElementById('add-nfr-btn').addEventListener('click', function () { addNfrBlock('', ['']); });
+
+  /* ---------------- epics / user stories / acceptance criteria ---------------- */
+  var epicsContainer = document.getElementById('epics-container');
+  var epicBlocks = [];
+
+  function addAcRow(container) {
+    var row = document.createElement('div');
+    row.className = 'ac-row';
+    var given = document.createElement('input'); given.type = 'text'; given.placeholder = 'starting condition';
+    var when = document.createElement('input'); when.type = 'text'; when.placeholder = 'the action taken';
+    var then = document.createElement('input'); then.type = 'text'; then.placeholder = 'the expected result';
+    var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.textContent = '✕';
+    rm.addEventListener('click', function () { row.remove(); });
+    function lbl(t) { var s = document.createElement('span'); s.className = 'lbl'; s.textContent = t; return s; }
+    row.appendChild(lbl('Given')); row.appendChild(given);
+    row.appendChild(lbl('When')); row.appendChild(when);
+    row.appendChild(lbl('Then')); row.appendChild(then);
+    row.appendChild(rm);
+    container.appendChild(row);
+    return { given: given, when: when, then: then, row: row };
+  }
+
+  function addStoryBlock(epicStoriesWrap, storyIndexLabelGetter, data) {
+    data = data || {};
+    var block = document.createElement('div');
+    block.className = 'story-block';
+
+    var head = document.createElement('div');
+    head.className = 'story-block-head';
+    var tag = document.createElement('span');
+    tag.className = 'story-tag mono';
+    tag.textContent = storyIndexLabelGetter();
+    var titleInput = document.createElement('input');
+    titleInput.type = 'text';
+    titleInput.placeholder = 'Story title, e.g. Freeze a card';
+    titleInput.value = data.title || '';
+    titleInput.className = 'flex-input';
+    var prioritySelect = document.createElement('select');
+    ['Critical', 'High', 'Medium', 'Low'].forEach(function (p) {
+      var o = document.createElement('option'); o.value = p; o.textContent = p; prioritySelect.appendChild(o);
+    });
+    prioritySelect.value = data.priority || 'High';
+    var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.textContent = '✕';
+    head.appendChild(tag); head.appendChild(titleInput); head.appendChild(prioritySelect); head.appendChild(rm);
+    block.appendChild(head);
+
+    var narrative = data.narrative || {};
+    var narrWrap = document.createElement('div');
+    narrWrap.className = 'narrative-row';
+    function narrPart(label, value, ph) {
+      var l = document.createElement('span'); l.className = 'lbl'; l.textContent = label;
+      var i = document.createElement('input'); i.type = 'text'; i.value = value || ''; i.placeholder = ph;
+      narrWrap.appendChild(l); narrWrap.appendChild(i);
+      return i;
+    }
+    var asA = narrPart('As a', narrative.asA, 'authenticated customer');
+    var iWant = narrPart('I want', narrative.iWant, 'to do something');
+    var soThat = narrPart('So that', narrative.soThat, 'I get value');
+    block.appendChild(narrWrap);
+
+    var acLabel = document.createElement('label');
+    acLabel.textContent = 'Acceptance criteria';
+    acLabel.style.fontSize = '0.78rem';
+    block.appendChild(acLabel);
+    var acWrap = document.createElement('div');
+    block.appendChild(acWrap);
+    var acRows = [];
+    var acs = (data.acceptanceCriteria && data.acceptanceCriteria.length) ? data.acceptanceCriteria : [{}];
+    acs.forEach(function (ac) {
+      var r = addAcRow(acWrap);
+      if (ac.given) r.given.value = ac.given;
+      if (ac.when) r.when.value = ac.when;
+      if (ac.then) r.then.value = ac.then;
+      acRows.push(r);
+    });
+    var addAcBtn = document.createElement('button');
+    addAcBtn.type = 'button';
+    addAcBtn.className = 'add-row';
+    addAcBtn.style.marginTop = '4px';
+    addAcBtn.textContent = '+ Add acceptance criterion';
+    addAcBtn.addEventListener('click', function () { acRows.push(addAcRow(acWrap)); });
+    block.appendChild(addAcBtn);
+
+    rm.addEventListener('click', function () {
+      block.remove();
+      epicStoriesWrap._stories = epicStoriesWrap._stories.filter(function (s) { return s.block !== block; });
+    });
+
+    epicStoriesWrap.appendChild(block);
+    var storyObj = { block: block, titleInput: titleInput, prioritySelect: prioritySelect, asA: asA, iWant: iWant, soThat: soThat, acWrap: acWrap };
+    epicStoriesWrap._stories.push(storyObj);
+    return storyObj;
+  }
+
+  function addEpicBlock(data) {
+    data = data || {};
+    var block = document.createElement('div');
+    block.className = 'epic-block';
+
+    var head = document.createElement('div');
+    head.className = 'epic-block-head';
+    var tag = document.createElement('span');
+    tag.className = 'epic-tag mono';
+    var titleInput = document.createElement('input');
+    titleInput.type = 'text';
+    titleInput.placeholder = 'Epic title (usually the same as the feature name)';
+    titleInput.value = data.title || '';
+    titleInput.className = 'flex-input';
+    var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.textContent = '✕';
+    head.appendChild(tag); head.appendChild(titleInput); head.appendChild(rm);
+    block.appendChild(head);
+
+    var descInput = document.createElement('textarea');
+    descInput.placeholder = 'What does this epic deliver, and why?';
+    descInput.value = data.description || '';
+    descInput.style.marginBottom = '10px';
+    block.appendChild(descInput);
+
+    var storiesWrap = document.createElement('div');
+    storiesWrap._stories = [];
+    block.appendChild(storiesWrap);
+
+    var addStoryBtn = document.createElement('button');
+    addStoryBtn.type = 'button';
+    addStoryBtn.className = 'add-row';
+    addStoryBtn.textContent = '+ Add user story';
+    block.appendChild(addStoryBtn);
+
+    function relabelStories() {
+      var epicIdx = epicBlocks.indexOf(epicObj) + 1;
+      storiesWrap._stories.forEach(function (s, i) {
+        s.block.querySelector('.story-tag').textContent = 'US-' + epicIdx + '.' + (i + 1);
+      });
+    }
+
+    addStoryBtn.addEventListener('click', function () {
+      addStoryBlock(storiesWrap, function () { return 'US-?'; }, {});
+      relabelStories();
+    });
+
+    rm.addEventListener('click', function () {
+      block.remove();
+      epicBlocks = epicBlocks.filter(function (e) { return e.block !== block; });
+      relabelAllEpics();
+    });
+
+    epicsContainer.appendChild(block);
+    var epicObj = { block: block, tag: tag, titleInput: titleInput, descInput: descInput, storiesWrap: storiesWrap };
+    epicBlocks.push(epicObj);
+
+    (data.userStories && data.userStories.length ? data.userStories : [{}]).forEach(function (s) {
+      addStoryBlock(storiesWrap, function () { return 'US-?'; }, s);
+    });
+    relabelAllEpics();
+    return epicObj;
+  }
+
+  function relabelAllEpics() {
+    epicBlocks.forEach(function (e, i) {
+      e.tag.textContent = 'EPIC-' + (i + 1);
+      e.storiesWrap._stories.forEach(function (s, j) {
+        s.block.querySelector('.story-tag').textContent = 'US-' + (i + 1) + '.' + (j + 1);
+      });
+    });
+  }
+
+  document.getElementById('add-epic-btn').addEventListener('click', function () { addEpicBlock({}); });
+
+  function getEpicsData() {
+    return epicBlocks.map(function (e, i) {
+      return {
+        id: 'EPIC-' + (i + 1),
+        title: e.titleInput.value.trim(),
+        description: e.descInput.value.trim(),
+        userStories: e.storiesWrap._stories.map(function (s, j) {
+          return {
+            id: 'US-' + (i + 1) + '.' + (j + 1),
+            title: s.titleInput.value.trim(),
+            priority: s.prioritySelect.value,
+            narrative: { asA: s.asA.value.trim(), iWant: s.iWant.value.trim(), soThat: s.soThat.value.trim() },
+            acceptanceCriteria: Array.prototype.slice.call(s.acWrap.children).map(function (row) {
+              var inputs = row.querySelectorAll('input');
+              return { given: inputs[0].value.trim(), when: inputs[1].value.trim(), then: inputs[2].value.trim() };
+            }).filter(function (ac) { return ac.given || ac.when || ac.then; }),
+          };
+        }).filter(function (s) { return s.title || s.narrative.asA || s.narrative.iWant; }),
+      };
+    }).filter(function (e) { return e.title || e.description || e.userStories.length; });
+  }
+
+  function getNfrData() {
+    return nfrBlocks.map(function (b) {
+      return { category: b.catInput.value.trim(), items: b.itemsRep.getValues() };
+    }).filter(function (n) { return n.category && n.items.length; });
+  }
+
+  /* ---------------- required-field status ---------------- */
+  var reqFields = ['f-productName', 'f-featureName', 'f-author'];
+  var pill = document.getElementById('req-pill');
+  var pillText = document.getElementById('req-pill-text');
+  function updateReqStatus() {
+    var missing = reqFields.filter(function (id) { return !document.getElementById(id).value.trim(); });
+    if (missing.length === 0) {
+      pill.classList.add('ready');
+      pillText.textContent = 'Ready to generate';
+    } else {
+      pill.classList.remove('ready');
+      pillText.textContent = missing.length + ' required field' + (missing.length > 1 ? 's' : '') + ' left';
+    }
+    return missing;
+  }
+  reqFields.forEach(function (id) {
+    document.getElementById(id).addEventListener('input', updateReqStatus);
+  });
+  updateReqStatus();
+
+  /* ---------------- gather + generate ---------------- */
+  function val(id) { var el = document.getElementById(id); return el.value.trim() || undefined; }
+
+  function gatherOptions() {
+    var opts = {
+      productName: val('f-productName'),
+      featureName: val('f-featureName'),
+      author: val('f-author'),
+      businessUnit: val('f-businessUnit'),
+      documentVersion: val('f-documentVersion'),
+      status: val('f-status'),
+      priority: val('f-priority'),
+      targetRelease: val('f-targetRelease'),
+      classification: val('f-classification'),
+      businessNeed: val('f-businessNeed'),
+      currentState: val('f-currentState'),
+      futureState: val('f-futureState'),
+      businessObjectives: reps.businessObjectives.getValues(),
+      successMetrics: reps.successMetrics.getValues(),
+      stakeholders: reps.stakeholders.getValues(),
+      elicitationTechniques: reps.elicitationTechniques.getValues(),
+      elicitationSources: reps.elicitationSources.getValues(),
+      inScope: reps.inScope.getValues(),
+      outOfScope: reps.outOfScope.getValues(),
+      channelsAffected: reps.channelsAffected.getValues(),
+      assumptions: reps.assumptions.getValues(),
+      constraints: reps.constraints.getValues(),
+      dependencies: reps.dependencies.getValues(),
+      regulatoryRequirements: reps.regulatoryRequirements.getValues(),
+      businessRules: reps.businessRules.getValues(),
+      dataRequirements: reps.dataRequirements.getValues(),
+      risks: reps.risks.getValues(),
+      approvers: reps.approvers.getValues(),
+      glossary: reps.glossary.getValues(),
+      epics: getEpicsData(),
+      nonFunctionalRequirements: getNfrData(),
+    };
+    Object.keys(opts).forEach(function (k) {
+      var v = opts[k];
+      if (v === undefined) { delete opts[k]; return; }
+      if (Array.isArray(v) && v.length === 0) delete opts[k];
+    });
+    return opts;
+  }
+
+  var statusMsg = document.getElementById('status-msg');
+  var genBtn = document.getElementById('generate-btn');
+  var resultBanner = document.getElementById('result-banner');
+  var lastUrl = null;
+
+  async function generate() {
+    var missing = updateReqStatus();
+    if (missing.length) {
+      statusMsg.textContent = 'Fill in Product, Feature, and Author first.';
+      statusMsg.className = 'error';
+      missing.forEach(function (id) { document.getElementById(id).classList.add('invalid'); });
+      document.getElementById(missing[0]).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById(missing[0]).focus();
+      return;
+    }
+    reqFields.forEach(function (id) { document.getElementById(id).classList.remove('invalid'); });
+
+    genBtn.disabled = true;
+    genBtn.textContent = 'Generating…';
+    statusMsg.textContent = '';
+    statusMsg.className = '';
+
+    try {
+      var options = gatherOptions();
+      var prd = PRD.buildPrd(options);
+      var doc = PRD.buildPrdDocument(prd);
+      var blob = await PRD.Packer.toBlob(doc);
+
+      var safeName = options.featureName.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
+      var filename = (safeName || 'Banking') + '_PRD.docx';
+
+      if (lastUrl) URL.revokeObjectURL(lastUrl);
+      lastUrl = URL.createObjectURL(blob);
+
+      var a = document.createElement('a');
+      a.href = lastUrl; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+
+      document.getElementById('download-link').href = lastUrl;
+      document.getElementById('download-link').download = filename;
+      document.getElementById('result-name').textContent = filename;
+      resultBanner.classList.add('visible');
+      statusMsg.textContent = 'Downloaded.';
+      statusMsg.className = 'ok';
+    } catch (err) {
+      statusMsg.textContent = (err && err.message) || 'Something went wrong.';
+      statusMsg.className = 'error';
+    } finally {
+      genBtn.disabled = false;
+      genBtn.textContent = 'Generate PRD';
+    }
+  }
+
+  genBtn.addEventListener('click', generate);
+
+  /* ---------------- clear / example ---------------- */
+  document.getElementById('clear-btn').addEventListener('click', function () {
+    document.querySelectorAll('input[type="text"], textarea').forEach(function (el) { el.value = ''; });
+    document.querySelectorAll('select').forEach(function (el) { el.selectedIndex = 0; });
+    Object.keys(reps).forEach(function (k) { reps[k].clear(); });
+    epicsContainer.innerHTML = ''; epicBlocks = [];
+    nfrContainer.innerHTML = ''; nfrBlocks = [];
+    resultBanner.classList.remove('visible');
+    statusMsg.textContent = ''; statusMsg.className = '';
+    updateReqStatus();
+  });
+
+  document.getElementById('load-example-btn').addEventListener('click', function () {
+    document.getElementById('clear-btn').click();
+
+    document.getElementById('f-productName').value = 'Digital Banking Platform';
+    document.getElementById('f-featureName').value = 'Instant Card Freeze & Unfreeze';
+    document.getElementById('f-author').value = 'Susanna Khloyan';
+    document.getElementById('f-businessUnit').value = 'Cards & Payments';
+    document.getElementById('f-documentVersion').value = '1.0';
+    document.getElementById('f-targetRelease').value = 'Q4 2026';
+    document.getElementById('f-priority').value = 'High';
+    document.getElementById('f-businessNeed').value = "Customers currently must call the contact center to freeze a lost or misplaced card, resulting in average handling times of 8+ minutes and a spike in fraud exposure during the delay.";
+    document.getElementById('f-currentState').value = 'Customers call the contact center, are authenticated via KBA, and an agent manually freezes the card. Average handling time is 8+ minutes.';
+    document.getElementById('f-futureState').value = 'Customers open the app or web banking, select the card, and tap Freeze — frozen instantly, with a confirmation and notification sent.';
+
+    reps.businessObjectives.addRow('Let customers freeze/unfreeze their own card in under 10 seconds via mobile or web banking.');
+    reps.businessObjectives.addRow('Reduce card-related contact center call volume by at least 30%.');
+
+    reps.successMetrics.addRow({ metric: 'Self-service freeze adoption', target: '≥ 70% within 90 days', measurement: 'Channel analytics' });
+    reps.successMetrics.addRow({ metric: 'Freeze action latency', target: '≤ 3 seconds end-to-end, p95', measurement: 'APM / transaction logs' });
+
+    reps.stakeholders.addRow({ name: 'TBD', role: 'Business Sponsor — Head of Cards', raci: 'A' });
+    reps.stakeholders.addRow({ name: 'Susanna Khloyan', role: 'Senior Business Analyst (author)', raci: 'R' });
+    reps.stakeholders.addRow({ name: 'TBD', role: 'Compliance Officer', raci: 'C' });
+
+    reps.inScope.addRow('Freeze/unfreeze for active, physical and virtual debit and credit cards.');
+    reps.outOfScope.addRow('Permanent card cancellation/replacement (existing separate flow).');
+    reps.channelsAffected.addRow('Mobile Banking App');
+    reps.channelsAffected.addRow('Internet/Online Banking');
+
+    reps.regulatoryRequirements.addRow({ regulation: 'PCI DSS', requirement: 'Cardholder data must be tokenized/masked — no plaintext storage, display, or logs.' });
+    reps.regulatoryRequirements.addRow({ regulation: 'PSD2 / Open Banking (SCA)', requirement: 'Strong Customer Authentication must be enforced unless a documented exemption applies.' });
+
+    reps.businessRules.addRow('Only the cardholder can freeze/unfreeze their own card.');
+    reps.businessRules.addRow('A frozen card blocks all new authorizations but does not reverse already-settled transactions.');
+
+    reps.risks.addRow({ risk: 'Card network does not guarantee real-time propagation of freeze status.', impact: 'High', likelihood: 'Medium', mitigation: 'Confirm network SLA; disclose any delay in-app.' });
+
+    addEpicBlock({
+      title: 'Instant Card Freeze & Unfreeze',
+      description: 'Allow a customer to instantly freeze and unfreeze their own card via mobile and web banking.',
+      userStories: [
+        {
+          title: 'Freeze a card',
+          priority: 'Critical',
+          narrative: { asA: 'authenticated customer', iWant: 'to freeze my card instantly', soThat: "I can stop new transactions if I've misplaced it" },
+          acceptanceCriteria: [
+            { given: 'the customer views an active card in the app', when: 'they tap Freeze and confirm', then: 'the card status changes to Frozen within 3 seconds' },
+            { given: 'a card is frozen', when: 'a new transaction is attempted on that card', then: 'the transaction is declined by the issuer' },
+          ],
+        },
+      ],
+    });
+
+    statusMsg.textContent = 'Example loaded — scroll down or click Generate PRD.';
+    statusMsg.className = 'ok';
+  });
+
+  /* seed one empty row per repeater so the form doesn't look broken/empty */
+  ['businessObjectives', 'successMetrics', 'stakeholders', 'elicitationTechniques', 'elicitationSources',
+   'inScope', 'outOfScope', 'channelsAffected', 'assumptions', 'constraints', 'dependencies',
+   'regulatoryRequirements', 'businessRules', 'dataRequirements', 'risks', 'approvers', 'glossary'
+  ].forEach(function (k) { reps[k].addRow(''); });
+  addEpicBlock({});
+})();
+</script>
