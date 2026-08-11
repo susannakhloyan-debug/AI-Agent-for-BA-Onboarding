@@ -6,6 +6,8 @@ const express = require('express');
 const { buildPlan } = require('./planContent');
 const { buildDocument } = require('./buildDocx');
 const { Packer } = require('docx');
+const { buildUserStory } = require('./userStoryContent');
+const { renderUserStoryMarkdown } = require('./buildUserStoryMarkdown');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -48,6 +50,49 @@ app.post('/generate', async (req, res) => {
       'Content-Disposition': `attachment; filename="${filename}"`,
     });
     res.send(buffer);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/generate-story', (req, res) => {
+  const body = req.body || {};
+
+  if (!body.feature || !body.role || !body.goal) {
+    res.status(400).json({ error: 'Feature, role, and goal are required.' });
+    return;
+  }
+
+  const options = {
+    feature: body.feature,
+    role: body.role,
+    goal: body.goal,
+    title: body.title || undefined,
+    trigger: body.trigger || undefined,
+    constraints: body.constraints || undefined,
+    designStatus: body.designStatus || undefined,
+    apis: body.apis || undefined,
+    preconditions: body.preconditions || undefined,
+    mainFlow: body.mainFlow || undefined,
+    outOfScope: body.outOfScope || undefined,
+    openQuestions: body.openQuestions || undefined,
+    security: body.security !== false,
+    notifications: body.notifications !== false,
+    localization: body.localization !== false,
+  };
+  Object.keys(options).forEach((k) => options[k] === undefined && delete options[k]);
+
+  try {
+    const story = buildUserStory(options);
+    const markdown = renderUserStoryMarkdown(story);
+    const safeName = story.title.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
+    const filename = `${safeName || 'User_Story'}.md`;
+
+    res.set({
+      'Content-Type': 'text/markdown; charset=utf-8',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+    });
+    res.send(markdown);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

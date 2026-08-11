@@ -47,6 +47,12 @@ npm start
 Then open **http://localhost:3000** in your browser, fill in the form, and
 click **Generate Onboarding Plan** — the `.docx` downloads automatically.
 
+The same server also hosts a web form for the
+[Banking User Story Generator](#banking-user-story-generator) at
+**http://localhost:3000/user-story.html** — fill in the fields and click
+**Generate User Story** to download a `.md` file (there's a link between
+the two forms in the page nav).
+
 ## Generate a plan (command line)
 
 Via CLI flags:
@@ -114,7 +120,8 @@ src/
   generateUserStory.js     # CLI entry point (banking user story)
   server.js                 # web form entry point (npm start)
 public/
-  index.html         # the server-backed web form
+  index.html         # the server-backed web form (onboarding plan)
+  user-story.html      # the server-backed web form (banking user story)
   standalone.html     # generated: the no-server, client-side page
 web/
   standalone-header.html  # standalone.html's <head>/styles
@@ -154,6 +161,12 @@ run appends a new `## <Story Title>` section to `UserStory.md` (created on
 first run), separated by `---`, so the file becomes a running backlog.
 Business rules (limits, fees, thresholds) are never invented — anything not
 supplied via flags is marked `[TBD]` or listed under Open Questions.
+
+There's also a web form for this (`npm start`, then open
+`/user-story.html`) — see [Generate a plan (web form with a server)](#generate-a-plan-web-form-with-a-server)
+above. The web form downloads one story per submission (as `.md`) rather
+than appending server-side, since the server may serve multiple users at
+once.
 
 ## Extending
 
