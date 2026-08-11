@@ -1,0 +1,128 @@
+{
+  "_readme": {
+    "what_this_is": "A blank intake template for the Banking PRD Generator. Replace every 'FILL IN' marker with your real project details, delete this _readme block (optional — the tool ignores it either way), save the file, and run the generator.",
+    "how_to_generate": "node src/generatePrd.js --config examples/YOUR-FILE-NAME.json",
+    "required_fields": "Only productName, featureName, and author are required. Everything else is optional.",
+    "optional_fields": "Any optional field/array you delete entirely falls back to the tool's built-in banking default (see README.md > Banking PRD Generator for what each default contains) — e.g. delete 'regulatoryRequirements' to fall back to the standard KYC/AML/PCI DSS/PSD2/GDPR/Basel III/SOX list, or delete 'glossary' to fall back to the standard banking glossary.",
+    "arrays": "Arrays (things in [ ]) can have as many entries as you need — copy the { ... } block inside and edit it, or delete entries you don't need.",
+    "raci_key": "RACI = R Responsible (does the work) / A Accountable (owns the outcome, usually one person) / C Consulted (gives input) / I Informed (kept in the loop).",
+    "acceptance_criteria_note": "Write acceptance criteria as Given/When/Then — that's what makes them testable instead of vague.",
+    "priority_field": "The top-level 'priority' field must be exactly one of: Critical, High, Medium, Low (it's pre-set to \"High\" — change it if needed). Epic/user-story priorities are free text and can be anything."
+  },
+
+  "productName": "FILL IN — the banking product/system this belongs to, e.g. \"Digital Banking Platform\" or \"Corporate Internet Banking\"",
+  "featureName": "FILL IN — the feature/epic this PRD covers, e.g. \"Instant Card Freeze & Unfreeze\"",
+  "author": "FILL IN — your full name",
+  "businessUnit": "FILL IN — e.g. \"Retail Banking\", \"Cards & Payments\", \"Digital Channels\"",
+  "documentVersion": "0.1",
+  "status": "Draft",
+  "priority": "High",
+  "targetRelease": "FILL IN — e.g. \"Q4 2026\"",
+
+  "businessNeed": "FILL IN — 2-4 sentences: what business problem does this feature solve, and why now?",
+
+  "businessObjectives": [
+    "FILL IN — objective 1, e.g. 'Reduce average handling time for X by Y%.'",
+    "FILL IN — objective 2"
+  ],
+
+  "successMetrics": [
+    { "metric": "FILL IN — e.g. 'Self-service adoption rate'", "target": "FILL IN — e.g. '≥ 70% within 90 days'", "measurement": "FILL IN — e.g. 'Channel analytics'" }
+  ],
+
+  "stakeholders": [
+    { "name": "TBD", "role": "Business Sponsor", "raci": "A" },
+    { "name": "TBD", "role": "Product Owner", "raci": "R" },
+    { "name": "FILL IN — your name", "role": "Senior Business Analyst (author)", "raci": "R" },
+    { "name": "TBD", "role": "Engineering Lead", "raci": "C" },
+    { "name": "TBD", "role": "Compliance Officer", "raci": "C" },
+    { "name": "TBD", "role": "Risk Officer", "raci": "C" },
+    { "name": "TBD", "role": "Operations / Contact Center", "raci": "I" }
+  ],
+
+  "currentState": "FILL IN — how is this need met today (manual process, branch visit, existing workaround)?",
+  "futureState": "FILL IN — what will the experience look like once this is delivered?",
+
+  "inScope": [
+    "FILL IN — what this feature explicitly includes"
+  ],
+  "outOfScope": [
+    "FILL IN — what this feature explicitly does NOT include"
+  ],
+  "channelsAffected": [
+    "FILL IN — e.g. Mobile Banking App, Internet/Online Banking, Branch/Teller, Contact Center/IVR"
+  ],
+
+  "assumptions": [
+    "FILL IN — something you're taking as true for planning purposes"
+  ],
+  "constraints": [
+    "FILL IN — a hard limit on the solution (technical, regulatory, budget, timeline)"
+  ],
+  "dependencies": [
+    "FILL IN — a system, team, or decision this feature depends on"
+  ],
+
+  "regulatoryRequirements": [
+    { "regulation": "FILL IN — e.g. 'KYC / Customer Due Diligence'", "requirement": "FILL IN — exactly what this feature must do to satisfy it" }
+  ],
+
+  "businessRules": [
+    "FILL IN — a rule that governs how this feature must behave (eligibility, limits, exceptions)"
+  ],
+
+  "epics": [
+    {
+      "id": "EPIC-1",
+      "title": "FILL IN — usually the same as featureName",
+      "description": "FILL IN — 1-2 sentences describing what this epic delivers and why",
+      "userStories": [
+        {
+          "id": "US-1.1",
+          "title": "FILL IN — short story title, e.g. 'Freeze a card'",
+          "narrative": {
+            "asA": "FILL IN — the user type, e.g. 'authenticated customer'",
+            "iWant": "FILL IN — what they want to do",
+            "soThat": "FILL IN — why they want it"
+          },
+          "priority": "FILL IN — Critical, High, Medium, or Low",
+          "acceptanceCriteria": [
+            { "given": "FILL IN — the starting condition", "when": "FILL IN — the action taken", "then": "FILL IN — the expected, testable result" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "nonFunctionalRequirements": [
+    {
+      "category": "Security",
+      "items": ["FILL IN — or delete this whole array to use the tool's default Security/Performance/Availability/Auditability/Usability/Scalability NFRs"]
+    }
+  ],
+
+  "dataRequirements": [
+    { "entity": "FILL IN — e.g. 'Customer Profile'", "description": "FILL IN — what data, and why this feature needs it", "sourceSystem": "FILL IN — e.g. 'Core Banking / CIF'", "sensitivity": "FILL IN — e.g. PII, PCI — Cardholder Data, Confidential" }
+  ],
+
+  "risks": [
+    { "risk": "FILL IN — what could go wrong", "impact": "FILL IN — High, Medium, or Low", "likelihood": "FILL IN — High, Medium, or Low", "mitigation": "FILL IN — how you'll reduce or handle it" }
+  ],
+
+  "approvers": [
+    { "name": "TBD", "role": "Business Sponsor" },
+    { "name": "TBD", "role": "Product Owner" },
+    { "name": "TBD", "role": "Compliance Officer" }
+  ],
+
+  "glossary": [
+    { "term": "FILL IN — a term specific to this feature that a reader might not know", "definition": "FILL IN — or delete this whole array to use the tool's built-in banking glossary (KYC, AML, PCI DSS, PSD2, SCA, SLA, RACI, NFR, BABOK)" }
+  ],
+
+  "elicitationTechniques": [
+    "FILL IN — how you gathered these requirements, e.g. 'Stakeholder interviews with Compliance and Operations'"
+  ],
+  "elicitationSources": [
+    "FILL IN — who/what you consulted, e.g. 'Business Sponsor', 'Existing policy documentation'"
+  ]
+}

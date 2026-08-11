@@ -209,6 +209,19 @@ node src/generatePrd.js --config examples/banking-prd-example.json
 "Instant Card Freeze & Unfreeze" feature) showing every supported field.
 CLI flags override config values.
 
+**Starting from a blank slate?** Copy
+`examples/prd-fill-in-template.json` — every field is a `"FILL IN — ..."`
+placeholder with guidance on what to write and which fields are optional
+(delete an optional array/field entirely to fall back to the tool's
+banking default). Replace the placeholders with your project's real
+details, save it, and run:
+
+```bash
+cp examples/prd-fill-in-template.json examples/my-feature.json
+# edit examples/my-feature.json with your project's details
+node src/generatePrd.js --config examples/my-feature.json
+```
+
 Run `node src/generatePrd.js --help` for the full option list.
 
 #### Options
@@ -261,6 +274,7 @@ web/
 scripts/
   build-standalone.js     # bundles src/*.js + web/*.html -> public/*.html for both tools
 examples/
-  loyalty-points-example.json  # onboarding plan example config
-  banking-prd-example.json     # banking PRD example config
+  loyalty-points-example.json    # onboarding plan example config
+  banking-prd-example.json       # banking PRD: complete, filled-in example config
+  prd-fill-in-template.json      # banking PRD: blank template to copy and fill in
 ```
