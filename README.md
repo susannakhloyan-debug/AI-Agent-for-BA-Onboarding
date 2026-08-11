@@ -43,9 +43,9 @@ npm install
 npm run build:standalone
 ```
 
-This regenerates `public/standalone.html` (and `public/prd-standalone.html`)
-by bundling those modules (via esbuild) together with the page in
-`web/standalone-header.html` / `web/standalone-footer.html`.
+This regenerates `public/standalone.html` (and both banking PRD
+standalone pages) by bundling those modules (via esbuild) together with
+the page in `web/standalone-header.html` / `web/standalone-footer.html`.
 
 ### Generate a plan (web form with a server)
 
@@ -162,12 +162,25 @@ field can be overridden for a real PRD via a `--config` JSON file.
 
 ### Generate a PRD (standalone page, no server)
 
-Open `public/prd-standalone.html` directly in your browser — same
-no-install, client-side experience as the onboarding plan's standalone
-page. Fill in the form, click **Generate PRD**, and the `.docx` downloads.
+Two standalone pages, both no-install and fully client-side — open
+either directly in your browser, fill in the form, click **Generate
+PRD**, and the `.docx` downloads:
 
-Rebuild it (together with the onboarding plan's standalone page) after
-changing `src/prdContent.js` or `src/buildPrdDocx.js`:
+- **`public/prd-full-standalone.html`** — every field the generator
+  supports, exposed in the form itself: business objectives & KPIs,
+  stakeholders (RACI), elicitation, scope, regulatory & compliance
+  requirements, business rules, epics → user stories → Given/When/Then
+  acceptance criteria (add/remove rows), non-functional requirements,
+  data requirements, risks, approvers, and glossary. No JSON needed.
+  Includes a **Load an example** button (Instant Card Freeze &
+  Unfreeze) to see the shape before starting your own.
+- **`public/prd-standalone.html`** — a shorter quick-fill version
+  covering just the core fields (product, feature, author, business
+  need, current/future state); everything else falls back to the
+  tool's banking defaults.
+
+Rebuild both (together with the onboarding plan's standalone page)
+after changing `src/prdContent.js` or `src/buildPrdDocx.js`:
 
 ```bash
 npm install
@@ -264,13 +277,15 @@ src/
   docxHelpers.js     # shared low-level docx-js building blocks (headings, tables, bullets, TOC)
   server.js          # web form entry point (npm start) — serves both tools
 public/
-  index.html            # onboarding plan: server-backed web form
-  standalone.html        # onboarding plan: generated, no-server client-side page
-  prd.html               # banking PRD: server-backed web form
-  prd-standalone.html    # banking PRD: generated, no-server client-side page
+  index.html                 # onboarding plan: server-backed web form
+  standalone.html             # onboarding plan: generated, no-server client-side page
+  prd.html                    # banking PRD: server-backed web form (core fields)
+  prd-standalone.html         # banking PRD: generated, no-server page (core fields)
+  prd-full-standalone.html    # banking PRD: generated, no-server page (every field)
 web/
-  standalone-header.html / standalone-footer.html          # onboarding plan standalone page
-  prd-standalone-header.html / prd-standalone-footer.html  # banking PRD standalone page
+  standalone-header.html / standalone-footer.html                    # onboarding plan standalone page
+  prd-standalone-header.html / prd-standalone-footer.html            # banking PRD standalone page (core fields)
+  prd-full-standalone-header.html / prd-full-standalone-footer.html  # banking PRD standalone page (every field)
 scripts/
   build-standalone.js     # bundles src/*.js + web/*.html -> public/*.html for both tools
 examples/

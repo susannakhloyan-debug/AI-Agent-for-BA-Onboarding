@@ -12,6 +12,13 @@ function esc(p) {
   return p.replace(/\\/g, '\\\\');
 }
 
+const PRD_ENTRY_SOURCE = `
+const { buildPrd } = require('${esc(path.join(ROOT, 'src', 'prdContent'))}');
+const { buildPrdDocument } = require('${esc(path.join(ROOT, 'src', 'buildPrdDocx'))}');
+const { Packer } = require('docx');
+window.BankingPRD = { buildPrd, buildPrdDocument, Packer };
+`;
+
 const TARGETS = [
   {
     name: 'BA Onboarding Plan',
@@ -26,16 +33,18 @@ window.BAOnboarding = { buildPlan, buildDocument, Packer };
 `,
   },
   {
-    name: 'Banking PRD Generator',
+    name: 'Banking PRD Generator (basic form)',
     outFile: path.join(OUT_DIR, 'prd-standalone.html'),
     header: path.join(ROOT, 'web', 'prd-standalone-header.html'),
     footer: path.join(ROOT, 'web', 'prd-standalone-footer.html'),
-    entrySource: `
-const { buildPrd } = require('${esc(path.join(ROOT, 'src', 'prdContent'))}');
-const { buildPrdDocument } = require('${esc(path.join(ROOT, 'src', 'buildPrdDocx'))}');
-const { Packer } = require('docx');
-window.BankingPRD = { buildPrd, buildPrdDocument, Packer };
-`,
+    entrySource: PRD_ENTRY_SOURCE,
+  },
+  {
+    name: 'Banking PRD Generator (full form)',
+    outFile: path.join(OUT_DIR, 'prd-full-standalone.html'),
+    header: path.join(ROOT, 'web', 'prd-full-standalone-header.html'),
+    footer: path.join(ROOT, 'web', 'prd-full-standalone-footer.html'),
+    entrySource: PRD_ENTRY_SOURCE,
   },
 ];
 
