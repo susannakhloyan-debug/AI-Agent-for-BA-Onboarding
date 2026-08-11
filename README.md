@@ -25,16 +25,45 @@ required once the file exists. It runs entirely client-side: fill in the
 form, click **Generate Onboarding Plan**, and the `.docx` downloads. You can
 also host this single file anywhere static (e.g. GitHub Pages).
 
-If you change `src/planContent.js` or `src/buildDocx.js`, rebuild it with:
+There's a matching standalone page for the
+[Banking User Story Generator](#banking-user-story-generator) at
+`public/user-story-standalone.html` — same idea, but downloads a `.md` file.
+The two pages link to each other in their nav.
+
+If you change `src/planContent.js`, `src/buildDocx.js`,
+`src/userStoryContent.js`, or `src/buildUserStoryMarkdown.js`, rebuild both
+standalone pages with:
 
 ```bash
 npm install
 npm run build:standalone
 ```
 
-This regenerates `public/standalone.html` by bundling those modules (via
-esbuild) together with the page in `web/standalone-header.html` /
-`web/standalone-footer.html`.
+This regenerates `public/standalone.html` and
+`public/user-story-standalone.html` by bundling those modules (via esbuild)
+together with the page markup in `web/standalone-header.html` /
+`web/standalone-footer.html` and
+`web/user-story-standalone-header.html` /
+`web/user-story-standalone-footer.html`.
+
+### Sharing a link (GitHub Pages)
+
+`docs/index.html` and `docs/user-story-standalone.html` are copies of the
+two standalone pages above, kept in the `docs/` folder so GitHub Pages can
+serve them as shareable links once this repo has Pages enabled (Settings →
+Pages → Deploy from a branch → `main` / `docs`). After rebuilding the
+standalone pages, refresh the `docs/` copies with:
+
+```bash
+cp public/standalone.html docs/index.html
+cp public/user-story-standalone.html docs/user-story-standalone.html
+sed -i 's|href="./standalone.html"|href="./index.html"|' docs/user-story-standalone.html
+```
+
+(The `sed` step exists because `docs/index.html` — unlike
+`public/standalone.html` — is the folder's root page, so the "back to
+onboarding plan" link needs to point at `./index.html` instead of
+`./standalone.html`.)
 
 ## Generate a plan (web form with a server)
 
@@ -120,17 +149,23 @@ src/
   generateUserStory.js     # CLI entry point (banking user story)
   server.js                 # web form entry point (npm start)
 public/
-  index.html         # the server-backed web form (onboarding plan)
-  user-story.html      # the server-backed web form (banking user story)
-  standalone.html     # generated: the no-server, client-side page
+  index.html                     # the server-backed web form (onboarding plan)
+  user-story.html                 # the server-backed web form (banking user story)
+  standalone.html                  # generated: no-server, client-side page (onboarding plan)
+  user-story-standalone.html        # generated: no-server, client-side page (banking user story)
 web/
-  standalone-header.html  # standalone.html's <head>/styles
-  standalone-footer.html  # standalone.html's markup + page script
+  standalone-header.html             # standalone.html's <head>/styles
+  standalone-footer.html             # standalone.html's markup + page script
+  user-story-standalone-header.html   # user-story-standalone.html's <head>/styles
+  user-story-standalone-footer.html   # user-story-standalone.html's markup + page script
 scripts/
-  build-standalone.js     # bundles src/*.js + web/*.html -> public/standalone.html
+  build-standalone.js     # bundles src/*.js + web/*.html -> public/*-standalone.html
 examples/
   loyalty-points-example.json
   card-block-story-example.json
+docs/
+  index.html                  # GitHub Pages copy of public/standalone.html
+  user-story-standalone.html   # GitHub Pages copy of public/user-story-standalone.html
 ```
 
 ## Banking User Story Generator

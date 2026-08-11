@@ -1,0 +1,387 @@
+<title>Banking User Story Generator</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --border: #d9dfe7;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --accent: #2e5395;
+    --accent-dark: #1f3864;
+    --ok: #2f9e44;
+    --error: #d14343;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14181f;
+      --card: #1c222c;
+      --border: #333c4a;
+      --text: #e5e9f0;
+      --muted: #9aa4b2;
+      --accent: #6f9ceb;
+      --accent-dark: #a9c6f7;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px 16px 64px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  .nav { margin-bottom: 12px; font-size: 0.85rem; }
+  .nav a { color: var(--accent); text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+  header.masthead {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; color: var(--accent-dark); }
+  p.subtitle { color: var(--muted); margin: 0; max-width: 56ch; }
+  .badge {
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+  form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 24px;
+  }
+  legend {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--accent);
+    padding: 0 0 10px;
+  }
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  label .req { color: var(--error); }
+  label .hint { color: var(--muted); font-weight: 400; }
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 52px; }
+  input:focus, textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .row { display: flex; gap: 16px; }
+  .row .field { flex: 1; }
+  .checkboxes { display: flex; flex-wrap: wrap; gap: 16px; }
+  .checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+  }
+  .checkbox-field input { width: auto; }
+  .actions { display: flex; align-items: center; gap: 16px; }
+  button {
+    padding: 12px 22px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { background: var(--accent-dark); }
+  button:disabled { opacity: 0.6; cursor: wait; }
+  #status { font-size: 0.9rem; min-height: 1.2em; }
+  #status.error { color: var(--error); }
+  #status.ok { color: var(--ok); }
+  .result {
+    display: none;
+    margin-top: 24px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .result.visible { display: block; }
+  .result h2 {
+    font-size: 1rem;
+    margin: 0 0 10px;
+    color: var(--accent-dark);
+  }
+  .result textarea {
+    width: 100%;
+    min-height: 320px;
+    font-family: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .result-actions { margin-top: 12px; display: flex; gap: 12px; }
+  a.dl-link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    align-self: center;
+  }
+  footer.foot {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-align: center;
+  }
+</style>
+
+<script>
+(()=>{var Q=(e=>typeof require<"u"?require:typeof Proxy<"u"?new Proxy(e,{get:(t,n)=>(typeof require<"u"?require:t)[n]}):e)(function(e){if(typeof require<"u")return require.apply(this,arguments);throw Error('Dynamic require of "'+e+'" is not supported')});var v=(e,t)=>()=>{try{return t||e((t={exports:{}}).exports,t),t.exports}catch(n){throw t=0,n}};var b=v((G,S)=>{"use strict";function r(e){return e?Array.isArray(e)?e:String(e).split(/[,;]/).map(t=>t.trim()).filter(Boolean):[]}function s(e){return e&&e.charAt(0).toUpperCase()+e.slice(1)}function N({feature:e,role:t,goal:n,title:i,trigger:o,constraints:m,designStatus:h,apis:C,preconditions:F,mainFlow:D,outOfScope:k,openQuestions:B,security:y=!0,notifications:A=!0,localization:U=!0,generatedDate:O}){if(!e)throw new Error("feature is required");if(!t)throw new Error("role is required");if(!n)throw new Error("goal is required");let l=r(m),c=r(C),f=r(F),g=r(D),$=r(k),L=r(B),I=i||s(e),E=`As a ${t}, I want to ${e}, so that ${n}.`,w=[`This story covers ${e} for ${t}.${o?` It is triggered from ${o}.`:""}`,h?`Design status: ${h}.`:"Design status: [TBD]."];l.length&&w.push(`Known constraints: ${l.join("; ")}.`),c.length&&w.push(`Related APIs: ${c.join(", ")}.`);let P=f.length?f:["The user is authenticated and has an active session.","The user's identity/KYC status meets the level required for this action [TBD].","The account/card/product involved is in a state that allows this action (e.g., active, not already blocked/closed) [TBD]."],z=g.length?g:[`The user navigates to the entry point for "${e}"${o?` (${o})`:""}.`,"The system displays the relevant information and available action(s).",`The user confirms they want to ${e}.`,"The system validates the request and required business rules [TBD].","The system processes the request and updates the relevant state.","The system confirms the outcome to the user."],u={happyPath:[{name:`Successfully ${e}`,given:`${s(t)} is authenticated and all preconditions are met`,when:`they complete the main flow to ${e}`,then:"the system completes the request successfully and confirms it to the user"}],alternativePaths:[{name:"User has multiple eligible accounts/cards",given:`${s(t)} has more than one eligible account or card`,when:`they start the flow to ${e}`,then:"the system lets them select which one the action applies to before proceeding"},{name:"User has partial or incomplete data",given:"some non-required information is missing",when:`${t} proceeds with ${e}`,then:"the system completes the action using available data and does not block on optional fields [TBD: confirm which fields are optional]"}],edgeCases:[{name:"Request times out",given:`${s(t)} has submitted the request to ${e}`,when:"the backend does not respond within the expected timeout",then:"the system shows a clear timeout error and does not apply a partial/duplicate change"},{name:"Network failure mid-flow",given:`${s(t)} is mid-flow for ${e}`,when:"the device loses network connectivity",then:"the system preserves entered data where possible and allows the user to retry once connectivity is restored"},{name:"Zero balance / expired card or account",given:"the account has a zero balance or the card/account has expired",when:`${t} attempts to ${e}`,then:"the system blocks the action and explains why, with a next-step suggestion [TBD: exact copy/business rule]"}],validation:[{name:"Field-level validation error",given:`${s(t)} is completing the flow to ${e}`,when:"they submit required information in an invalid format",then:"the system shows an inline, field-level error and does not submit the request"},{name:"System-level error on submit",given:`${s(t)} submits a valid request to ${e}`,when:"the backend returns an unexpected error",then:"the system shows a generic error state, logs the failure, and allows the user to retry"}]};y&&(u.security=[{name:"Step-up authentication required",given:`${s(t)} attempts to ${e}`,when:"the action is classified as sensitive per the bank's step-up policy [TBD]",then:"the system requires an additional authentication step before completing the action"},{name:"Session timeout during the flow",given:`${s(t)} is mid-flow for ${e}`,when:"the session expires due to inactivity",then:"the system ends the session, discards unsaved changes, and requires re-authentication"}]),A&&(u.notifications=[{name:"Confirmation notification sent",given:`${e} completes successfully`,when:"the system finishes processing the request",then:"the user receives a push/SMS/email confirmation per their notification preferences [TBD: which channels]"}]),U&&(u.localization=[{name:"Content is localized",given:`${s(t)} has the app language set to Armenian or English`,when:`they go through the flow to ${e}`,then:"all UI text, error messages, and notifications appear in the selected language"}]);let d=[];y&&d.push("All actions related to this story are captured in the audit log (who, what, when)."),c.length&&d.push(`Response time for ${c.join(", ")} should meet the team's standard SLA [TBD].`),d.push("The flow is accessible per the team's accessibility standard [TBD].");let M=$.length?$:[`Business rules, limits, fees, or thresholds related to ${e} are not defined here \u2014 see Open Questions.`],a=[...L];return l.length||a.push("Are there regulatory (PSD2/PCI) or internal policy constraints that apply to this flow?"),f.length||a.push("What exact KYC/account/card state is required before this action is allowed?"),h||a.push("Is a confirmed design (Figma) available for this flow, or should UI be treated as flexible?"),a.length||a.push("None at this time."),{title:I,userStoryStatement:E,context:w,preconditions:P,mainFlow:z,acceptanceCriteria:u,nonFunctional:d,outOfScope:M,openQuestions:a,meta:{feature:e,role:t,goal:n,trigger:o,constraints:l,designStatus:h,apis:c,generatedDate:O||new Date().toISOString().slice(0,10)}}}S.exports={buildUserStory:N}});var x=v((V,j)=>{"use strict";var T={happyPath:"Happy Path",alternativePaths:"Alternative Paths",edgeCases:"Edge Cases",validation:"Validation & Error States",security:"Security & Compliance",notifications:"Notifications",localization:"Localization"};function R(e){return["```gherkin",`Scenario: ${e.name}`,`  Given ${e.given}`,`  When ${e.when}`,`  Then ${e.then}`,"```"].join(`
+`)}function K(e){let t=["### Acceptance Criteria"];return Object.keys(T).forEach(n=>{let i=e[n];!i||!i.length||(t.push(`#### ${T[n]}`),t.push(i.map(R).join(`
+
+`)))}),t.join(`
+
+`)}function p(e){return e.map(t=>`- ${t}`).join(`
+`)}function q(e){let t=[`## ${e.title}`,`**User Story:** ${e.userStoryStatement}`,["### Context / Background",e.context.join(" ")].join(`
+
+`),["### Preconditions",p(e.preconditions)].join(`
+
+`),["### Main Flow (Happy Path)",e.mainFlow.map((n,i)=>`${i+1}. ${n}`).join(`
+`)].join(`
+
+`),K(e.acceptanceCriteria)];return e.nonFunctional&&e.nonFunctional.length&&t.push(["### Non-Functional Requirements",p(e.nonFunctional)].join(`
+
+`)),t.push(["### Out of Scope",p(e.outOfScope)].join(`
+
+`)),t.push(["### Open Questions",p(e.openQuestions)].join(`
+
+`)),t.join(`
+
+`)}function H(e,t){let n=Q("fs"),i=q(e);if(!n.existsSync(t))return n.writeFileSync(t,`# User Stories
+
+${i}
+`),{created:!0};let m=n.readFileSync(t,"utf8").replace(/\s+$/,"");return n.writeFileSync(t,`${m}
+
+---
+
+${i}
+`),{created:!1}}j.exports={renderUserStoryMarkdown:q,appendUserStoryToFile:H}});var{buildUserStory:W}=b(),{renderUserStoryMarkdown:Y}=x();window.BankingUserStory={buildUserStory:W,renderUserStoryMarkdown:Y};})();
+
+</script>
+
+<div class="wrap">
+  <div class="nav"><a href="./standalone.html">&larr; BA Onboarding Plan Generator</a></div>
+  <header class="masthead">
+    <div>
+      <h1>Banking User Story Generator</h1>
+      <p class="subtitle">Fill in a feature, role, and goal — get back a complete banking user story with Gherkin acceptance criteria, ready for a sprint backlog.</p>
+    </div>
+    <div class="badge">GENERATED CLIENT-SIDE<br>NO DATA LEAVES THIS PAGE</div>
+  </header>
+
+  <form id="story-form" novalidate>
+    <fieldset>
+      <legend>Required</legend>
+      <div class="field">
+        <label for="feature">Feature / Action <span class="req">*</span></label>
+        <input type="text" id="feature" name="feature" required placeholder="e.g. block a lost or stolen debit card" />
+      </div>
+      <div class="field">
+        <label for="role">User Role <span class="req">*</span> <span class="hint">(be specific)</span></label>
+        <input type="text" id="role" name="role" required placeholder="e.g. cardholder with an active debit card" />
+      </div>
+      <div class="field">
+        <label for="goal">Goal / Value <span class="req">*</span> <span class="hint">("so that ...")</span></label>
+        <input type="text" id="goal" name="goal" required placeholder="e.g. unauthorized transactions are stopped immediately" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional</legend>
+      <div class="field">
+        <label for="title">Story Title <span class="hint">(defaults to the feature text)</span></label>
+        <input type="text" id="title" name="title" placeholder="e.g. Block a lost or stolen card" />
+      </div>
+      <div class="field">
+        <label for="trigger">Trigger / Entry Point</label>
+        <input type="text" id="trigger" name="trigger" placeholder="e.g. the Cards section of the mobile app" />
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="designStatus">Design Status</label>
+          <input type="text" id="designStatus" name="designStatus" placeholder="confirmed Figma / not yet designed / reference only" />
+        </div>
+        <div class="field">
+          <label for="apis">Related APIs <span class="hint">(comma-separated)</span></label>
+          <input type="text" id="apis" name="apis" placeholder="POST /cards/{cardId}/block" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="constraints">Known Constraints <span class="hint">(comma-separated; regulatory/technical)</span></label>
+        <input type="text" id="constraints" name="constraints" placeholder="PSD2 strong customer authentication applies" />
+      </div>
+      <div class="field">
+        <label for="preconditions">Preconditions <span class="hint">(comma-separated; default: generic banking preconditions)</span></label>
+        <textarea id="preconditions" name="preconditions" placeholder="User is authenticated, card is active, ..."></textarea>
+      </div>
+      <div class="field">
+        <label for="mainFlow">Main Flow Steps <span class="hint">(comma-separated, in order; default: generic happy-path steps)</span></label>
+        <textarea id="mainFlow" name="mainFlow" placeholder="User opens Cards, selects the card, taps Block, confirms, ..."></textarea>
+      </div>
+      <div class="field">
+        <label for="outOfScope">Out of Scope <span class="hint">(comma-separated)</span></label>
+        <textarea id="outOfScope" name="outOfScope"></textarea>
+      </div>
+      <div class="field">
+        <label for="openQuestions">Open Questions <span class="hint">(comma-separated)</span></label>
+        <textarea id="openQuestions" name="openQuestions"></textarea>
+      </div>
+      <div class="field">
+        <label>Include Acceptance Criteria For</label>
+        <div class="checkboxes">
+          <div class="checkbox-field">
+            <input type="checkbox" id="security" name="security" checked />
+            <label for="security" style="margin:0;">Security &amp; Compliance</label>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="notifications" name="notifications" checked />
+            <label for="notifications" style="margin:0;">Notifications</label>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="localization" name="localization" checked />
+            <label for="localization" style="margin:0;">Localization</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" id="submit-btn">Generate User Story</button>
+      <span id="status" role="status"></span>
+    </div>
+  </form>
+
+  <div class="result" id="result">
+    <h2 id="result-title"></h2>
+    <textarea id="result-markdown" readonly></textarea>
+    <div class="result-actions">
+      <a href="#" id="download-link" class="dl-link" download>Download again</a>
+    </div>
+  </div>
+
+  <footer class="foot">Banking User Story Generator — runs entirely in your browser, nothing is uploaded.</footer>
+</div>
+
+<script>
+(function () {
+  const { buildUserStory, renderUserStoryMarkdown } = window.BankingUserStory;
+
+  const form = document.getElementById('story-form');
+  const statusEl = document.getElementById('status');
+  const btn = document.getElementById('submit-btn');
+  const result = document.getElementById('result');
+  const downloadLink = document.getElementById('download-link');
+  let lastUrl = null;
+
+  function fieldValue(id) {
+    const el = document.getElementById(id);
+    return el && el.value ? el.value.trim() : undefined;
+  }
+
+  function generate() {
+    statusEl.textContent = '';
+    statusEl.className = '';
+    result.classList.remove('visible');
+
+    const options = {
+      feature: fieldValue('feature'),
+      role: fieldValue('role'),
+      goal: fieldValue('goal'),
+      title: fieldValue('title'),
+      trigger: fieldValue('trigger'),
+      designStatus: fieldValue('designStatus'),
+      apis: fieldValue('apis'),
+      constraints: fieldValue('constraints'),
+      preconditions: fieldValue('preconditions'),
+      mainFlow: fieldValue('mainFlow'),
+      outOfScope: fieldValue('outOfScope'),
+      openQuestions: fieldValue('openQuestions'),
+      security: document.getElementById('security').checked,
+      notifications: document.getElementById('notifications').checked,
+      localization: document.getElementById('localization').checked,
+    };
+    Object.keys(options).forEach((k) => options[k] === undefined && delete options[k]);
+
+    if (!options.feature || !options.role || !options.goal) {
+      statusEl.textContent = 'Feature, role, and goal are required.';
+      statusEl.className = 'error';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+
+    try {
+      const story = buildUserStory(options);
+      const markdown = renderUserStoryMarkdown(story);
+      const safeName = story.title.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
+      const filename = (safeName || 'User_Story') + '.md';
+
+      const blob = new Blob([markdown], { type: 'text/markdown' });
+      if (lastUrl) URL.revokeObjectURL(lastUrl);
+      lastUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = lastUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      downloadLink.href = lastUrl;
+      downloadLink.download = filename;
+      document.getElementById('result-title').textContent = story.title;
+      document.getElementById('result-markdown').value = markdown;
+      result.classList.add('visible');
+      statusEl.textContent = `Downloaded ${filename}`;
+      statusEl.className = 'ok';
+    } catch (err) {
+      statusEl.textContent = err.message || 'Something went wrong generating the story.';
+      statusEl.className = 'error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate User Story';
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    generate();
+  });
+})();
+</script>

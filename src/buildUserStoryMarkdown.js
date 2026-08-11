@@ -1,7 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-
 const AC_SECTION_TITLES = {
   happyPath: 'Happy Path',
   alternativePaths: 'Alternative Paths',
@@ -59,6 +57,7 @@ function renderUserStoryMarkdown(story) {
 }
 
 function appendUserStoryToFile(story, filePath) {
+  const fs = require('fs');
   const storyMarkdown = renderUserStoryMarkdown(story);
   const exists = fs.existsSync(filePath);
 

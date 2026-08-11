@@ -1,0 +1,193 @@
+</script>
+
+<div class="wrap">
+  <div class="nav"><a href="./standalone.html">&larr; BA Onboarding Plan Generator</a></div>
+  <header class="masthead">
+    <div>
+      <h1>Banking User Story Generator</h1>
+      <p class="subtitle">Fill in a feature, role, and goal — get back a complete banking user story with Gherkin acceptance criteria, ready for a sprint backlog.</p>
+    </div>
+    <div class="badge">GENERATED CLIENT-SIDE<br>NO DATA LEAVES THIS PAGE</div>
+  </header>
+
+  <form id="story-form" novalidate>
+    <fieldset>
+      <legend>Required</legend>
+      <div class="field">
+        <label for="feature">Feature / Action <span class="req">*</span></label>
+        <input type="text" id="feature" name="feature" required placeholder="e.g. block a lost or stolen debit card" />
+      </div>
+      <div class="field">
+        <label for="role">User Role <span class="req">*</span> <span class="hint">(be specific)</span></label>
+        <input type="text" id="role" name="role" required placeholder="e.g. cardholder with an active debit card" />
+      </div>
+      <div class="field">
+        <label for="goal">Goal / Value <span class="req">*</span> <span class="hint">("so that ...")</span></label>
+        <input type="text" id="goal" name="goal" required placeholder="e.g. unauthorized transactions are stopped immediately" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional</legend>
+      <div class="field">
+        <label for="title">Story Title <span class="hint">(defaults to the feature text)</span></label>
+        <input type="text" id="title" name="title" placeholder="e.g. Block a lost or stolen card" />
+      </div>
+      <div class="field">
+        <label for="trigger">Trigger / Entry Point</label>
+        <input type="text" id="trigger" name="trigger" placeholder="e.g. the Cards section of the mobile app" />
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="designStatus">Design Status</label>
+          <input type="text" id="designStatus" name="designStatus" placeholder="confirmed Figma / not yet designed / reference only" />
+        </div>
+        <div class="field">
+          <label for="apis">Related APIs <span class="hint">(comma-separated)</span></label>
+          <input type="text" id="apis" name="apis" placeholder="POST /cards/{cardId}/block" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="constraints">Known Constraints <span class="hint">(comma-separated; regulatory/technical)</span></label>
+        <input type="text" id="constraints" name="constraints" placeholder="PSD2 strong customer authentication applies" />
+      </div>
+      <div class="field">
+        <label for="preconditions">Preconditions <span class="hint">(comma-separated; default: generic banking preconditions)</span></label>
+        <textarea id="preconditions" name="preconditions" placeholder="User is authenticated, card is active, ..."></textarea>
+      </div>
+      <div class="field">
+        <label for="mainFlow">Main Flow Steps <span class="hint">(comma-separated, in order; default: generic happy-path steps)</span></label>
+        <textarea id="mainFlow" name="mainFlow" placeholder="User opens Cards, selects the card, taps Block, confirms, ..."></textarea>
+      </div>
+      <div class="field">
+        <label for="outOfScope">Out of Scope <span class="hint">(comma-separated)</span></label>
+        <textarea id="outOfScope" name="outOfScope"></textarea>
+      </div>
+      <div class="field">
+        <label for="openQuestions">Open Questions <span class="hint">(comma-separated)</span></label>
+        <textarea id="openQuestions" name="openQuestions"></textarea>
+      </div>
+      <div class="field">
+        <label>Include Acceptance Criteria For</label>
+        <div class="checkboxes">
+          <div class="checkbox-field">
+            <input type="checkbox" id="security" name="security" checked />
+            <label for="security" style="margin:0;">Security &amp; Compliance</label>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="notifications" name="notifications" checked />
+            <label for="notifications" style="margin:0;">Notifications</label>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="localization" name="localization" checked />
+            <label for="localization" style="margin:0;">Localization</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" id="submit-btn">Generate User Story</button>
+      <span id="status" role="status"></span>
+    </div>
+  </form>
+
+  <div class="result" id="result">
+    <h2 id="result-title"></h2>
+    <textarea id="result-markdown" readonly></textarea>
+    <div class="result-actions">
+      <a href="#" id="download-link" class="dl-link" download>Download again</a>
+    </div>
+  </div>
+
+  <footer class="foot">Banking User Story Generator — runs entirely in your browser, nothing is uploaded.</footer>
+</div>
+
+<script>
+(function () {
+  const { buildUserStory, renderUserStoryMarkdown } = window.BankingUserStory;
+
+  const form = document.getElementById('story-form');
+  const statusEl = document.getElementById('status');
+  const btn = document.getElementById('submit-btn');
+  const result = document.getElementById('result');
+  const downloadLink = document.getElementById('download-link');
+  let lastUrl = null;
+
+  function fieldValue(id) {
+    const el = document.getElementById(id);
+    return el && el.value ? el.value.trim() : undefined;
+  }
+
+  function generate() {
+    statusEl.textContent = '';
+    statusEl.className = '';
+    result.classList.remove('visible');
+
+    const options = {
+      feature: fieldValue('feature'),
+      role: fieldValue('role'),
+      goal: fieldValue('goal'),
+      title: fieldValue('title'),
+      trigger: fieldValue('trigger'),
+      designStatus: fieldValue('designStatus'),
+      apis: fieldValue('apis'),
+      constraints: fieldValue('constraints'),
+      preconditions: fieldValue('preconditions'),
+      mainFlow: fieldValue('mainFlow'),
+      outOfScope: fieldValue('outOfScope'),
+      openQuestions: fieldValue('openQuestions'),
+      security: document.getElementById('security').checked,
+      notifications: document.getElementById('notifications').checked,
+      localization: document.getElementById('localization').checked,
+    };
+    Object.keys(options).forEach((k) => options[k] === undefined && delete options[k]);
+
+    if (!options.feature || !options.role || !options.goal) {
+      statusEl.textContent = 'Feature, role, and goal are required.';
+      statusEl.className = 'error';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+
+    try {
+      const story = buildUserStory(options);
+      const markdown = renderUserStoryMarkdown(story);
+      const safeName = story.title.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
+      const filename = (safeName || 'User_Story') + '.md';
+
+      const blob = new Blob([markdown], { type: 'text/markdown' });
+      if (lastUrl) URL.revokeObjectURL(lastUrl);
+      lastUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = lastUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      downloadLink.href = lastUrl;
+      downloadLink.download = filename;
+      document.getElementById('result-title').textContent = story.title;
+      document.getElementById('result-markdown').value = markdown;
+      result.classList.add('visible');
+      statusEl.textContent = `Downloaded ${filename}`;
+      statusEl.className = 'ok';
+    } catch (err) {
+      statusEl.textContent = err.message || 'Something went wrong generating the story.';
+      statusEl.className = 'error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate User Story';
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    generate();
+  });
+})();
+</script>

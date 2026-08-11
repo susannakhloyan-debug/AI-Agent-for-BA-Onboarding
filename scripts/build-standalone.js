@@ -7,19 +7,35 @@ const esbuild = require('esbuild');
 
 const ROOT = path.join(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'public');
-const OUT_FILE = path.join(OUT_DIR, 'standalone.html');
 
-const ENTRY_SOURCE = `
+const PAGES = [
+  {
+    outFile: 'standalone.html',
+    header: 'standalone-header.html',
+    footer: 'standalone-footer.html',
+    entrySource: `
 const { buildPlan } = require('${path.join(ROOT, 'src', 'planContent').replace(/\\/g, '\\\\')}');
 const { buildDocument } = require('${path.join(ROOT, 'src', 'buildDocx').replace(/\\/g, '\\\\')}');
 const { Packer } = require('docx');
 window.BAOnboarding = { buildPlan, buildDocument, Packer };
-`;
+`,
+  },
+  {
+    outFile: 'user-story-standalone.html',
+    header: 'user-story-standalone-header.html',
+    footer: 'user-story-standalone-footer.html',
+    entrySource: `
+const { buildUserStory } = require('${path.join(ROOT, 'src', 'userStoryContent').replace(/\\/g, '\\\\')}');
+const { renderUserStoryMarkdown } = require('${path.join(ROOT, 'src', 'buildUserStoryMarkdown').replace(/\\/g, '\\\\')}');
+window.BankingUserStory = { buildUserStory, renderUserStoryMarkdown };
+`,
+  },
+];
 
-function main() {
+function buildPage({ outFile, header, footer, entrySource }) {
   const result = esbuild.buildSync({
     stdin: {
-      contents: ENTRY_SOURCE,
+      contents: entrySource,
       resolveDir: ROOT,
       loader: 'js',
     },
@@ -36,14 +52,19 @@ function main() {
     throw new Error('bundled JS unexpectedly contains a literal </script sequence');
   }
 
-  const header = fs.readFileSync(path.join(ROOT, 'web', 'standalone-header.html'), 'utf8');
-  const footer = fs.readFileSync(path.join(ROOT, 'web', 'standalone-footer.html'), 'utf8');
+  const headerHtml = fs.readFileSync(path.join(ROOT, 'web', header), 'utf8');
+  const footerHtml = fs.readFileSync(path.join(ROOT, 'web', footer), 'utf8');
 
-  const html = `${header}\n<script>\n${bundleJs}\n${footer}`;
+  const html = `${headerHtml}\n<script>\n${bundleJs}\n${footerHtml}`;
 
+  const outPath = path.join(OUT_DIR, outFile);
   fs.mkdirSync(OUT_DIR, { recursive: true });
-  fs.writeFileSync(OUT_FILE, html);
-  console.log(`Standalone page written to: ${OUT_FILE} (${(html.length / 1024).toFixed(0)} KB)`);
+  fs.writeFileSync(outPath, html);
+  console.log(`Standalone page written to: ${outPath} (${(html.length / 1024).toFixed(0)} KB)`);
+}
+
+function main() {
+  PAGES.forEach(buildPage);
 }
 
 main();
