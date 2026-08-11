@@ -5,6 +5,8 @@ const path = require('path');
 const express = require('express');
 const { buildPlan } = require('./planContent');
 const { buildDocument } = require('./buildDocx');
+const { buildPrd } = require('./prdContent');
+const { buildPrdDocument } = require('./buildPrdDocx');
 const { Packer } = require('docx');
 
 const app = express();
@@ -42,6 +44,46 @@ app.post('/generate', async (req, res) => {
     const buffer = await Packer.toBuffer(doc);
     const safeName = options.baName.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
     const filename = `${safeName || 'BA'}_Onboarding_Plan.docx`;
+
+    res.set({
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+    });
+    res.send(buffer);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/generate-prd', async (req, res) => {
+  const body = req.body || {};
+
+  if (!body.productName || !body.featureName || !body.author) {
+    res.status(400).json({ error: 'Product name, feature name, and author are required.' });
+    return;
+  }
+
+  const options = {
+    productName: body.productName,
+    featureName: body.featureName,
+    author: body.author,
+    businessUnit: body.businessUnit || undefined,
+    documentVersion: body.documentVersion || undefined,
+    status: body.status || undefined,
+    priority: body.priority || undefined,
+    targetRelease: body.targetRelease || undefined,
+    businessNeed: body.businessNeed || undefined,
+    currentState: body.currentState || undefined,
+    futureState: body.futureState || undefined,
+  };
+  Object.keys(options).forEach((k) => options[k] === undefined && delete options[k]);
+
+  try {
+    const prd = buildPrd(options);
+    const doc = buildPrdDocument(prd);
+    const buffer = await Packer.toBuffer(doc);
+    const safeName = options.featureName.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
+    const filename = `${safeName || 'Banking'}_PRD.docx`;
 
     res.set({
       'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',

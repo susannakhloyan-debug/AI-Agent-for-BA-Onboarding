@@ -7,19 +7,42 @@ const esbuild = require('esbuild');
 
 const ROOT = path.join(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'public');
-const OUT_FILE = path.join(OUT_DIR, 'standalone.html');
 
-const ENTRY_SOURCE = `
-const { buildPlan } = require('${path.join(ROOT, 'src', 'planContent').replace(/\\/g, '\\\\')}');
-const { buildDocument } = require('${path.join(ROOT, 'src', 'buildDocx').replace(/\\/g, '\\\\')}');
+function esc(p) {
+  return p.replace(/\\/g, '\\\\');
+}
+
+const TARGETS = [
+  {
+    name: 'BA Onboarding Plan',
+    outFile: path.join(OUT_DIR, 'standalone.html'),
+    header: path.join(ROOT, 'web', 'standalone-header.html'),
+    footer: path.join(ROOT, 'web', 'standalone-footer.html'),
+    entrySource: `
+const { buildPlan } = require('${esc(path.join(ROOT, 'src', 'planContent'))}');
+const { buildDocument } = require('${esc(path.join(ROOT, 'src', 'buildDocx'))}');
 const { Packer } = require('docx');
 window.BAOnboarding = { buildPlan, buildDocument, Packer };
-`;
+`,
+  },
+  {
+    name: 'Banking PRD Generator',
+    outFile: path.join(OUT_DIR, 'prd-standalone.html'),
+    header: path.join(ROOT, 'web', 'prd-standalone-header.html'),
+    footer: path.join(ROOT, 'web', 'prd-standalone-footer.html'),
+    entrySource: `
+const { buildPrd } = require('${esc(path.join(ROOT, 'src', 'prdContent'))}');
+const { buildPrdDocument } = require('${esc(path.join(ROOT, 'src', 'buildPrdDocx'))}');
+const { Packer } = require('docx');
+window.BankingPRD = { buildPrd, buildPrdDocument, Packer };
+`,
+  },
+];
 
-function main() {
+function buildTarget(target) {
   const result = esbuild.buildSync({
     stdin: {
-      contents: ENTRY_SOURCE,
+      contents: target.entrySource,
       resolveDir: ROOT,
       loader: 'js',
     },
@@ -33,17 +56,21 @@ function main() {
 
   const bundleJs = result.outputFiles[0].text;
   if (bundleJs.includes('</script')) {
-    throw new Error('bundled JS unexpectedly contains a literal </script sequence');
+    throw new Error(`bundled JS for "${target.name}" unexpectedly contains a literal </script sequence`);
   }
 
-  const header = fs.readFileSync(path.join(ROOT, 'web', 'standalone-header.html'), 'utf8');
-  const footer = fs.readFileSync(path.join(ROOT, 'web', 'standalone-footer.html'), 'utf8');
+  const header = fs.readFileSync(target.header, 'utf8');
+  const footer = fs.readFileSync(target.footer, 'utf8');
 
   const html = `${header}\n<script>\n${bundleJs}\n${footer}`;
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
-  fs.writeFileSync(OUT_FILE, html);
-  console.log(`Standalone page written to: ${OUT_FILE} (${(html.length / 1024).toFixed(0)} KB)`);
+  fs.writeFileSync(target.outFile, html);
+  console.log(`${target.name} standalone page written to: ${target.outFile} (${(html.length / 1024).toFixed(0)} KB)`);
+}
+
+function main() {
+  TARGETS.forEach(buildTarget);
 }
 
 main();

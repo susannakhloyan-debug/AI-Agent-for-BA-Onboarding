@@ -1,0 +1,156 @@
+</script>
+
+<div class="wrap">
+  <h1>Banking PRD Generator</h1>
+  <p class="subtitle">For a Senior Business Analyst specialized in banking applications. Fill in the fields below and click Generate — a formatted .docx PRD downloads automatically. Runs entirely in your browser; nothing is uploaded.</p>
+  <p class="babok">Structured per BABOK&reg; v3 knowledge areas (Business Analysis Planning &amp; Monitoring, Elicitation &amp; Collaboration, Requirements Life Cycle Management, Strategy Analysis, Requirements Analysis &amp; Design Definition, Solution Evaluation), with banking-specific sections for regulatory/compliance requirements, channels, and NFRs. 17 sections total, including a Requirements Traceability Matrix and a BABOK Coverage Checklist appendix.</p>
+
+  <div class="note">
+    This form covers the core fields. For full control over stakeholders, epics/user stories,
+    risks, regulatory requirements, glossary, etc., use the CLI with a JSON config instead:
+    <code>node src/generatePrd.js --config your-config.json</code>. See
+    <code>examples/banking-prd-example.json</code> for a complete example.
+  </div>
+
+  <form id="prd-form">
+    <fieldset>
+      <legend>Required</legend>
+      <div class="field">
+        <label for="productName">Product / System Name <span class="req">*</span></label>
+        <input type="text" id="productName" name="productName" required placeholder="e.g. Digital Banking Platform" />
+      </div>
+      <div class="field">
+        <label for="featureName">Feature / Epic This PRD Covers <span class="req">*</span></label>
+        <input type="text" id="featureName" name="featureName" required placeholder="e.g. Instant Card Freeze &amp; Unfreeze" />
+      </div>
+      <div class="field">
+        <label for="author">Author (Senior BA) <span class="req">*</span></label>
+        <input type="text" id="author" name="author" required placeholder="e.g. Susanna Khloyan" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional</legend>
+      <div class="row">
+        <div class="field">
+          <label for="businessUnit">Business Unit</label>
+          <input type="text" id="businessUnit" name="businessUnit" placeholder="Retail Banking" />
+        </div>
+        <div class="field">
+          <label for="priority">Priority</label>
+          <select id="priority" name="priority">
+            <option value="Critical">Critical</option>
+            <option value="High" selected>High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="documentVersion">Document Version</label>
+          <input type="text" id="documentVersion" name="documentVersion" placeholder="0.1" />
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <input type="text" id="status" name="status" placeholder="Draft" />
+        </div>
+        <div class="field">
+          <label for="targetRelease">Target Release</label>
+          <input type="text" id="targetRelease" name="targetRelease" placeholder="e.g. Q4 2026" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="businessNeed">Business Need <span class="hint">(optional — a good default is generated if left blank)</span></label>
+        <textarea id="businessNeed" name="businessNeed" placeholder="Why does this feature need to exist? What's the business problem?"></textarea>
+      </div>
+      <div class="field">
+        <label for="currentState">Current State (As-Is) <span class="hint">(optional)</span></label>
+        <textarea id="currentState" name="currentState" placeholder="How is this need met today?"></textarea>
+      </div>
+      <div class="field">
+        <label for="futureState">Future State (To-Be) <span class="hint">(optional)</span></label>
+        <textarea id="futureState" name="futureState" placeholder="What will the experience look like once delivered?"></textarea>
+      </div>
+    </fieldset>
+
+    <button type="submit" id="submit-btn">Generate PRD</button>
+    <div id="status"></div>
+  </form>
+</div>
+
+<script>
+(function () {
+  const { buildPrd, buildPrdDocument, Packer } = window.BankingPRD;
+
+  const form = document.getElementById('prd-form');
+  const statusEl = document.getElementById('status');
+  const btn = document.getElementById('submit-btn');
+
+  function fieldValue(id) {
+    const el = document.getElementById(id);
+    return el && el.value ? el.value.trim() : undefined;
+  }
+
+  async function generate() {
+    statusEl.textContent = '';
+    statusEl.className = '';
+
+    const options = {
+      productName: fieldValue('productName'),
+      featureName: fieldValue('featureName'),
+      author: fieldValue('author'),
+      businessUnit: fieldValue('businessUnit'),
+      priority: fieldValue('priority'),
+      documentVersion: fieldValue('documentVersion'),
+      status: fieldValue('status'),
+      targetRelease: fieldValue('targetRelease'),
+      businessNeed: fieldValue('businessNeed'),
+      currentState: fieldValue('currentState'),
+      futureState: fieldValue('futureState'),
+    };
+    Object.keys(options).forEach((k) => options[k] === undefined && delete options[k]);
+
+    if (!options.productName || !options.featureName || !options.author) {
+      statusEl.textContent = 'Product name, feature name, and author are required.';
+      statusEl.className = 'error';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+
+    try {
+      const prd = buildPrd(options);
+      const doc = buildPrdDocument(prd);
+      const blob = await Packer.toBlob(doc);
+
+      const safeName = options.featureName.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
+      const filename = (safeName || 'Banking') + '_PRD.docx';
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      statusEl.textContent = `Downloaded ${filename}`;
+      statusEl.className = 'ok';
+    } catch (err) {
+      statusEl.textContent = err.message || 'Something went wrong generating the PRD.';
+      statusEl.className = 'error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate PRD';
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    generate();
+  });
+})();
+</script>
